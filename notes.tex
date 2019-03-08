@@ -33,14 +33,14 @@
 
 \maketitle
 \section{Introduction to Optimization Algorithms}
-\subsection{Goal of the course}
+\subsection{Goal of the Course}
 \begin{itemize}
     \item Understand foundations of optimization
     \item Learn to analyze widely used optimization algorithms
     \item Be familiar with implementation of optimization algorithms
 \end{itemize}
 
-\subsection{Topics involved}
+\subsection{Topics Involved}
 \begin{itemize}
     \item Unconstrained optimization
     \item Constrained optimization
@@ -51,7 +51,7 @@
     \item Global optimization
 \end{itemize}
 
-\subsection{Basic concepts}
+\subsection{Basic Concepts}
 \noindent\textbf{Problem Definition}
 Find the value of the decision variable s.t.
 objective function is maximized/minimized
@@ -326,7 +326,7 @@ $f(x)$ is second-order differentiable at $x$,
     \end{align}
     Then $\psi$ is a \textbf{descent function} of $(\Omega, \mathcal{A})$.
 \end{definition}
-\subsection{Convergence of algorithm}
+\subsection{Convergence of Algorithm}
 \par
 \begin{theorem}
     $\mathcal{A}$ is an algorithm on $X$,
@@ -367,12 +367,8 @@ Generate local model $Q_{k}(s)$ of $x^{(k)}$,
 
 \clearpage
 \section{Unconstrained Optimization}
-For unconstrained optimization problem 
-\begin{align}
-    \min_{x \in \mathbb{R}^n} f(x)
-\end{align}
 
-\subsection{Gradient based methods}
+\subsection{Gradient Based Methods}
 
 \begin{algorithm}[H]
     \SetAlgoLined
@@ -387,5 +383,34 @@ For unconstrained optimization problem
      }
      \caption{Example of gradient based algorithm}
 \end{algorithm}
-    
+\subsection{Determine Search Direction}
+\noindent\textbf{First-order gradient method}
+\par
+For unconstrained optimization problem 
+\begin{align}
+    \min_{x \in \mathbb{R}^n} f(x)
+\end{align}
+We have
+\begin{align}
+    f(x) = f(x^{(k)}) + \bigtriangledown f(x^{(k)})^T(x - x^{(k)})
+    + O(\parallel x - x^{(k)} \parallel^2)
+\end{align}
+Set $d^{(k)} = - \bigtriangledown f(x^{(k)})$,
+when $\alpha_k$ is sufficiently small,
+\begin{align}
+    f(x^{(k)} + \alpha_k d^{(k)}) < f(x^{(k)})
+\end{align}
+
+\noindent\textbf{Second-order gradient method -- Newton Direction}
+\par
+\begin{align}
+    f(x) = &f(x^{(k)}) + \bigtriangledown f(x^{(k)})^T(x - x^{(k)}) \\
+    &+ \frac{1}{2} (x - x^{(k)})^T \bigtriangledown^2 f(x^{(k)}) (x - x^{(k)})
+    + O(\parallel x - x^{(k)} \parallel^3)
+\end{align}
+Set $d^{(k)} = -G_k^{-1} \bigtriangledown f(x^{(k)})$,
+ where $G_k = \bigtriangledown^2 f(x^{(k)})$,
+ i.e., Hesse matrix of $f$ at $x^{(k)}$.
+ \subsection{Determine Step Factor}
+
 \end{document}
