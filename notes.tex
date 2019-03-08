@@ -1,0 +1,389 @@
+% last updated in April 2002 by Antje Endemann
+% Based on CVPR 07 and LNCS, with modifications by DAF, AZ and elle, 2008 and AA, 2010, and CC, 2011; TT, 2014; AAS, 2016
+
+\documentclass[runningheads]{llncs}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb} % define this before the line numbering.
+\usepackage{ruler}
+\usepackage{color}
+\usepackage[width=122mm,left=12mm,paperwidth=146mm,height=193mm,top=12mm,paperheight=217mm]{geometry}
+\usepackage{multirow, multicol}
+\usepackage[ruled,vlined]{algorithm2e}
+    
+% \newtheorem{theorem}{Theorem}
+% \newtheorem{theorem}{Theorem}[section]
+
+\begin{document}
+% \renewcommand\thelinenumber{\color[rgb]{0.2,0.5,0.8}\normalfont\sffamily\scriptsize\arabic{linenumber}\color[rgb]{0,0,0}}
+% \renewcommand\makeLineNumber {\hss\thelinenumber\ \hspace{6mm} \rlap{\hskip\textwidth\ \hspace{6.5mm}\thelinenumber}}
+% \linenumbers
+\pagestyle{headings}
+\mainmatter
+\def\ECCV18SubNumber{1452}  % Insert your submission number here
+
+\title{Optimization Algorithm Notes} % Replace with your title
+
+\titlerunning{ECCV-18 submission ID \ECCV18SubNumber}
+
+\authorrunning{ECCV-18 submission ID \ECCV18SubNumber}
+
+\author{Depu Meng}
+\institute{Feb. $2019$}
+
+
+\maketitle
+\section{Introduction to Optimization Algorithms}
+\subsection{Goal of the course}
+\begin{itemize}
+    \item Understanding fundations of optimization
+    \item Learn to analyze widely used optimization algorithms
+    \item Be familiar with implementation of optimization algorithms
+\end{itemize}
+
+\subsection{Topics involved}
+\begin{itemize}
+    \item Unconstrained optimization
+    \item Constrained optimization
+    \item Convex optimization
+    \item Sparse optimization
+    \item Stochastic optimization
+    \item Combinational optimization
+    \item Global optimization
+\end{itemize}
+
+\subsection{Basic concepts}
+\noindent\textbf{Problem Definition}
+Find the value of the decision variable s.t.
+objective function is maximized/minimized
+under certain conditions.
+\begin{align}
+    & \min f(x) \\
+    & s.t. x \in \mathcal{S} \subset \mathbb{R}^n
+\end{align}
+Here, we call $\mathcal{S}$ \textit{feasible region}.
+\par
+We often denote constrained optimization Problem
+ as 
+\begin{align}
+    & \min f(x) \\
+    s.t.\quad & g_i(x) \geq 0, i = 1,..., n \\
+    & b_i(x) = 0, i \in 1, ..., m
+\end{align}
+
+\begin{definition}{Global Optimality.}
+    For global optimal value $x^* \in \mathcal{S}$,
+    \begin{align}
+        f(x^*) \leq f(x), \forall x \in \mathcal{S}
+    \end{align}
+\end{definition}
+
+\begin{definition}{Local Optimality.}
+    For local optimal value $x^* \in \mathcal{S}$, $\exists U(x^*)$,
+    such that
+    \begin{align}
+        f(x^*) \leq f(x), \forall x \in \mathcal{S} \cap U(x^*)
+    \end{align}
+    \end{definition}
+
+\begin{definition}{Feasible direction.}
+    Let $x \in \mathcal{S}$, $d \in \mathbb{R}^n$
+    is a non-zero vector. if $\exists \delta > 0$,
+    such that
+    \begin{align}
+        x + \lambda d \in \mathcal{S}, \forall \lambda \in (0, \delta)
+    \end{align}
+    Then $d$ is a \textbf{feasible direction} at $x$.
+    We denote $F(x, \mathcal{S})$ as the set of feasible directions
+    at $x$.
+\end{definition}
+
+\begin{definition}{Descent direction.}
+    $f(x): \mathbb{R}^n \rightarrow \mathbb{R}$, $x \in \mathbb{R}^n$,
+    $d$ is a non-zero vector. If $\exists \delta > 0$, such that
+    \begin{align}
+        f(x + \lambda d) < f(x), \forall \lambda \in (0, \delta)
+    \end{align}
+    Then $d$ is a \textbf{descent direction} at $x$.
+    We denote $D(x, f) = \{ d | \bigtriangledown f(x)^T d < 0 \}$
+    as the set of descent direction at $x$.
+\end{definition}
+
+\subsection{Optimal Conditions}
+\par\noindent
+\textbf{Unconstrained Optimization}
+\par
+First-order necessery condition:
+$f(x)$ is differentiable at $x$, 
+\begin{align}
+    \bigtriangledown f(x) = 0
+\end{align}
+\par
+Second-order necessery condition:
+$f(x)$ is second-order differentiable at $x$,
+\begin{align}
+    \bigtriangledown f(x) = 0 \\
+    \bigtriangledown^2 f(x) \geq 0
+\end{align}
+\noindent
+\textbf{Constrained Optimization}
+
+
+\begin{theorem}{Fritz-John Condition}
+    \par
+    For constrained optimization problem
+    \begin{align}
+        & \min f(x) \\
+        s.t.\quad & g_i(x) \geq 0, i = 1,..., n \\
+        & h_i(x) = 0, i \in 1, ..., m
+    \end{align}
+    Denote $I(x) = \{i \in \{1,...,n\} | g_i(x) = 0\}$.
+    For $x \in \mathcal{S}$, $f$ and $g_i, i \in I(x)$
+    is differentiable at $x$, $h_j(x)$ is continuously
+    differentiable at $x$.
+    If $x$ is local optimal, then there exists non-trivial
+    $\lambda_0, \lambda_i \geq 0, i \in I(x)$
+    and $\mu_j$, such that
+    \begin{align}
+        \lambda_0 \bigtriangledown f(x) - \sum_{i \in I(x)} \lambda_i
+        \bigtriangledown g_i(x) - \sum_{j=1}^m \mu_j
+        \bigtriangledown h_j(x) = 0
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    (i) If $\{\bigtriangledown h_j (x)\}$ is linearly dependent,
+    then there exists non-trivial $\mu_j$, such that
+    \begin{align}
+        \sum_{j=1}^m \bigtriangledown h_j (x) = 0
+    \end{align}
+    Let $\lambda_0, \lambda_i, i \in I(x) = 0$, then (13) holds.
+    \par
+    (ii) If $\{\bigtriangledown h_j (x)\}$ is linearly independent,
+    Denote
+    \begin{align}
+        F_g &= F(x, g) = \{ d | \bigtriangledown g_i(x)^Td > 0, i \in I(x)\} \\
+        F_h &= F(x, h) = \{ d | \bigtriangledown h_j(x)^Td = 0, j = 1,...,m\}
+    \end{align}
+    If $x$ is a optimal value, then appearently 
+    $F(x, \mathcal{S}) \cap D(x, f) = \varnothing$.
+    Due to the independence of $\{\bigtriangledown h_j (x)\}$,
+    we have {\color{red}$F_g \cap F_h \subset F(x, \mathcal{S})$},
+    then 
+    \begin{align}
+        F_g \cap F_h \cap D(x, f) = \varnothing
+    \end{align}
+    that is
+    \begin{align}
+        \left\{
+        \begin{array}{ll}
+            \bigtriangledown f(x)^Td < 0 \\
+            \bigtriangledown g_i(x)^Td > 0, i \in I(x) \\
+            \bigtriangledown h_j (x)^Td  =0, j = 1,...,m
+        \end{array}
+        \right.
+    \end{align}
+    has no solution.
+    Let 
+    \begin{align}
+        A &= \{ \bigtriangledown f(x)^T, \bigtriangledown g_i(x)\}^T, i \in I(x) \\
+        B &= \{ -\bigtriangledown h_j(x)\}, j = 1,...,m
+    \end{align}
+    Then (21) is equivalent to
+    \begin{align}
+        \left\{
+        \begin{array}{ll}
+            A^T d < 0 \\
+            B^T d = 0
+        \end{array}
+        \right.
+    \end{align}
+    has no solution.
+    \par
+    \noindent
+    Denote
+    \begin{align}
+        S_1 &= 
+        \left\{
+            \left(
+            \begin{array}{ll}
+                y_1 \\
+                y_2
+            \end{array}
+            \right)
+            | y_1 = A^Td, y_2 = B^Td, d \in \mathbb{R}^n
+        \right\} \\
+        S_2 &= 
+        \left\{
+            \left(
+            \begin{array}{ll}
+                y_1 \\
+                y_2
+            \end{array}
+            \right)
+            | y_1 < 0, y_2 = 0
+        \right\} 
+    \end{align}
+    $S_1, S_2$ are non-trivial convex sets,
+    and $S_1 \cap S_2 = \varnothing$.
+    From \textit{Hyperplane Separation Theorem}:
+    $\exists 
+    \left(
+    \begin{array}{ll}
+        p_1 \\
+        p_2
+    \end{array}
+    \right)$, so that
+    \begin{align}
+        p_1^TA^Td + p_2^TB^Td \geq p_1^Ty_1 + p_2^Ty_2,
+        \forall d \in \mathbb{R}^n, 
+        \forall\left(
+        \begin{array}{ll}
+            y_1 \\
+            y_2
+        \end{array}
+        \right) \in CL(S_2)
+    \end{align}
+    Let $y_2 = 0, d = 0, y_1 < 0$, we have
+    \begin{align}
+        p_1 \geq 0
+    \end{align}
+    Let $\left(
+        \begin{array}{ll}
+            y_1 \\
+            y_2
+        \end{array}
+        \right) = 
+        \left(
+        \begin{array}{ll}
+            0 \\
+            0
+        \end{array}
+        \right) 
+         \in CL(S_2)$
+    So that
+    \begin{align}
+        (p_1^TA^T + p_2^TB^T)d \geq 0 \\
+        (Ap_1 + Bp_2)^Td \geq 0
+    \end{align}
+    Let $d = - (Ap_1 + Bp_2)$, we have
+    \begin{align}
+        Ap_1 + Bp_2 = 0
+    \end{align}
+    From above, we have
+    \begin{align}
+        \left\{
+        \begin{array}{ll}
+            Ap_1 + Bp_2 = 0 \\
+            p_1 \geq 0
+        \end{array}
+        \right.
+    \end{align}
+    Let $p_1 = \{\lambda_0,..., \lambda_{I(x}\}$,
+    $p_2 = \{\mu_1, ..., \mu_m\}$, i.e.,
+    \begin{align}
+        \left\{
+            \begin{array}{ll}
+            \lambda_0 \bigtriangledown f(x) - \sum_{i \in I(x)} \lambda_i
+            \bigtriangledown g_i(x) - \sum_{j=1}^m \mu_j
+            \bigtriangledown h_j(x) = 0 \\
+            \lambda_i \geq 0
+            \end{array}
+            \right.
+    \end{align}
+\end{proof}
+
+\begin{theorem}{Kuhn-Tucker Condition}
+    \par
+    For constrained optimization problem
+    \begin{align}
+        & \min f(x) \\
+        s.t.\quad & g_i(x) \geq 0, i = 1,..., n \\
+        & h_i(x) = 0, i \in 1, ..., m
+    \end{align}
+    Denote $I(x) = \{i \in \{1,...,n\} | g_i(x) = 0\}$.
+    For $x \in \mathcal{S}$, $f$ and $g_i, i \in I(x)$
+    is differentiable at $x$, $h_j(x)$ is continuously
+    differentiable at $x$.
+    $\{\bigtriangledown g_i(x), i \in I(x);\bigtriangledown h_j(x), 
+    j = 1,...,m\}$ is linearly independent.
+    If $x$ is local optimal, then $\exists \lambda_i \geq 0$
+    and $\mu_j$, such that
+    \begin{align}
+        \bigtriangledown f(x) - \sum_{i \in I(x)} \lambda_i
+        \bigtriangledown g_i(x) - \sum_{j=1}^m \mu_j
+        \bigtriangledown h_j(x) = 0
+    \end{align}
+\end{theorem}
+\subsection{Descent function}
+\par
+\begin{definition}{Descent function.}
+    Denote solution set $\Omega \in X$, $\mathcal{A}$ is an
+    algorithm on $X$, $\psi: X \rightarrow \mathbb{R}$.
+    If
+    \begin{align}
+        \psi(y) < \psi(x),\quad \forall x \notin \Omega, y \in \mathcal{A}(x) \\
+        \psi(y) \leq \psi(x),\quad \forall x \in \Omega, y \in \mathcal{A}(x)
+    \end{align}
+    Then $\psi$ is a \textbf{descent function} of $(\Omega, \mathcal{A})$.
+\end{definition}
+\subsection{Convergence of algorithm}
+\par
+\begin{theorem}
+    $\mathcal{A}$ is an algorithm on $X$,
+    $\Omega$ is the solution set, $x^{(0)} \in X$.
+    If $x^{(k)} \in \Omega$, then the iteration stops.
+    Otherwise set $x^{(k+1)} = \mathcal{A}(x^{(k)}), k:=k+1$.
+    If
+    \begin{itemize}
+        \item $\{x^{(k)}\}$ in a compact subset of $X$
+        \item There exists a continuous function $\psi$,
+         $\psi$ is a descent function of $(\Omega, \mathcal{A})$
+        \item $\mathcal{A}$ is closed on $\Omega^C$
+    \end{itemize}
+    Then, any convergent subsequence of $\{x^{(k)}\}$ converges to 
+    $x, x \in \Omega$.
+\end{theorem}
+\begin{proof}
+    
+\end{proof}
+
+\subsection{Search Methods}
+\noindent\textbf{Line Search}
+\par
+Generate $d^{(k)}$ from 
+$x^{(k)}$, 
+\begin{align}
+    x^{(k+1)} = x^{(k)} + \alpha_kd^{(k)}
+\end{align}.
+search $\alpha_k$ in 1-D space.
+\par
+\noindent\textbf{Trust Region}
+\par
+Generate local model $Q_{k}(s)$ of $x^{(k)}$,
+\begin{align}
+    s^{(k)} = \mathop{\arg\min} Q_k(s) \\
+    x^{(k+1)} = x^{(k)} + s^{(k)}
+\end{align}
+
+\clearpage
+\section{Unconstrained Optimization}
+\begin{align}
+    \min_{x \in \mathbb{R}^n} f(x)
+\end{align}
+\subsection{Gradient based methods}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{Solution set $\Omega$, cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n, k:= 0$\;
+     \While{$x^{(k)} \notin \Omega$}{
+      $d^{(k)} = - H_k \bigtriangledown f(x^{(k)})$,
+        ($H_k$ is a positive definite symmetrical matrix)\;
+        solve $\min_{\alpha_k \geq 0} f(x^{(k)} + \alpha_k d^{(k)})$\;
+        $x^{(k+1)} = x^{(k)} + \alpha_kd^{(k)}$, $k:= k+1$
+     }
+     \caption{Example of gradient based algorithm}
+    \end{algorithm}
+    
+\end{document}
