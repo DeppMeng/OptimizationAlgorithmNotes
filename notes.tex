@@ -35,7 +35,7 @@
 \section{Introduction to Optimization Algorithms}
 \subsection{Goal of the course}
 \begin{itemize}
-    \item Understanding fundations of optimization
+    \item Understand foundations of optimization
     \item Learn to analyze widely used optimization algorithms
     \item Be familiar with implementation of optimization algorithms
 \end{itemize}
@@ -367,9 +367,11 @@ Generate local model $Q_{k}(s)$ of $x^{(k)}$,
 
 \clearpage
 \section{Unconstrained Optimization}
+For unconstrained optimization problem 
 \begin{align}
     \min_{x \in \mathbb{R}^n} f(x)
 \end{align}
+
 \subsection{Gradient based methods}
 
 \begin{algorithm}[H]
@@ -384,6 +386,6 @@ Generate local model $Q_{k}(s)$ of $x^{(k)}$,
         $x^{(k+1)} = x^{(k)} + \alpha_kd^{(k)}$, $k:= k+1$
      }
      \caption{Example of gradient based algorithm}
-    \end{algorithm}
+\end{algorithm}
     
 \end{document}
