@@ -154,7 +154,7 @@ $f(x)$ is second-order differentiable at $x$,
     (i) If $\{\bigtriangledown h_j (x)\}$ is linearly dependent,
     then there exists non-trivial $\mu_j$, such that
     \begin{align}
-        \sum_{j=1}^m \bigtriangledown h_j (x) = 0
+        \sum_{j=1}^m \bigtriangledown \mu_jh_j (x) = 0
     \end{align}
     Let $\lambda_0, \lambda_i, i \in I(x) = 0$, then (13) holds.
     \par
@@ -185,7 +185,7 @@ $f(x)$ is second-order differentiable at $x$,
     has no solution.
     Let 
     \begin{align}
-        A &= \{ \bigtriangledown f(x)^T, \bigtriangledown g_i(x)\}^T, i \in I(x) \\
+        A &= \{ \bigtriangledown f(x)^T, -\bigtriangledown g_i(x)\}^T, i \in I(x) \\
         B &= \{ -\bigtriangledown h_j(x)\}, j = 1,...,m
     \end{align}
     Then (21) is equivalent to
@@ -232,7 +232,7 @@ $f(x)$ is second-order differentiable at $x$,
         p_1 \\
         p_2
     \end{array}
-    \right)$, so that
+    \right)$, such that
     \begin{align}
         p_1^TA^Td + p_2^TB^Td \geq p_1^Ty_1 + p_2^Ty_2,
         \forall d \in \mathbb{R}^n, 
@@ -411,6 +411,6 @@ when $\alpha_k$ is sufficiently small,
 Set $d^{(k)} = -G_k^{-1} \bigtriangledown f(x^{(k)})$,
  where $G_k = \bigtriangledown^2 f(x^{(k)})$,
  i.e., Hesse matrix of $f$ at $x^{(k)}$.
- \subsection{Determine Step Factor}
+\subsection{Determine Step Factor -- Line Search}
 
 \end{document}
