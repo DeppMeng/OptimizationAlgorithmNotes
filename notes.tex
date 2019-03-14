@@ -112,13 +112,13 @@ We often denote constrained optimization Problem
 \par\noindent
 \textbf{Unconstrained Optimization}
 \par
-First-order necessery condition:
+First-order necessary condition:
 $f(x)$ is differentiable at $x$, 
 \begin{align}
     \bigtriangledown f(x) = 0
 \end{align}
 \par
-Second-order necessery condition:
+Second-order necessary condition:
 $f(x)$ is second-order differentiable at $x$,
 \begin{align}
     \bigtriangledown f(x) = 0 \\
@@ -370,6 +370,9 @@ Generate local model $Q_{k}(s)$ of $x^{(k)}$,
 
 \subsection{Gradient Based Methods}
 
+\begin{align}
+    \min_{x \in \mathbb{R}^n} f(x)
+\end{align}
 \begin{algorithm}[H]
     \SetAlgoLined
     \KwData{Solution set $\Omega$, cost function $f$}
@@ -412,5 +415,298 @@ Set $d^{(k)} = -G_k^{-1} \bigtriangledown f(x^{(k)})$,
  where $G_k = \bigtriangledown^2 f(x^{(k)})$,
  i.e., Hesse matrix of $f$ at $x^{(k)}$.
 \subsection{Determine Step Factor -- Line Search}
+
+\begin{align}
+    \min_{\alpha \geq 0} \varphi(\alpha) = f(x^{(k)} + \alpha d^{(k)})
+\end{align}
+\noindent\textbf{Exact Line Search}
+\par
+Solve Line Search problem in finite iterations.
+\par
+\noindent\textbf{Inexact Line Search}
+\par
+In some cases, the exact solution of Line Search
+is not necessary, so we can use inexace line search
+to improve algorithm efficiency.
+\par
+\noindent\textit{Goldstein Conditions}
+\begin{align}
+    \varphi(\alpha) &\leq \varphi(0) + \rho\alpha\varphi'(0) \\
+    \varphi(\alpha) &\geq \varphi(0) + (1 - \rho)\alpha\varphi'(0)
+\end{align}
+where$\rho \in (\frac{1}{2}, 1)$ is a fixed parameter.
+\par
+However, the downside of Goldstein Conditions
+is that the optimal value might not lie in
+the valid area.
+\par\noindent\textit{Wolfe-Powell Conditions}
+\begin{align}
+    \varphi(\alpha) &\leq \varphi(0) + \rho\alpha\varphi'(0) \\
+    \varphi'(\alpha) &\geq \sigma\varphi'(0)
+\end{align}
+where $\sigma \in (\rho, 1)$.
+
+\subsection{Global Convergence}
+\begin{theorem}
+    Assume $\bigtriangledown f(x)$ exists and uniformly continuous
+    on level set $L(x^{(0)}) = \{ x | f(x) \leq f(x^{(0)})\}$.
+    Denote $\theta^{(k)}$ as the angle between $d^{(k)}$
+    and $-\bigtriangledown f(x^{(k)})$.
+    \begin{align}
+        \theta^{(k)} \leq \frac{\pi}{2} - \mu
+    \end{align}
+    If step factor is determined by following methods
+    \begin{itemize}
+        \item Exace Line Search
+        \item Goldstein Conditions
+        \item Wolfe-Powell Conditions
+    \end{itemize}
+    Then, there exists $k$, such that $\bigtriangledown f(x^{(k)}) = 0$,
+    or $f(x^{(k)}) \rightarrow 0$ or $f(x^{(k)}) \rightarrow - \infty$.
+\end{theorem}
+\begin{proof}
+    
+\end{proof}
+
+\subsection{Steepest Descent Method}
+Steepest Descent Method is a Line Search Method.
+\begin{align}
+    x^{(k+1)} = x^{(k)} - \alpha_k \bigtriangledown f(x^{(k)})
+\end{align}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{Termination error $\epsilon$, cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n, k:= 0$\;
+     \While{$\parallel g^{(k)} \parallel \geq \epsilon$}{
+        $d^{(k)} = - g^{(k)}$\;
+        solve $\min_{\alpha_k \geq 0} f(x^{(k)} + \alpha_k d^{(k)})$\;
+        $x^{(k+1)} = x^{(k)} + \alpha_kd^{(k)}$, $k:= k+1$\;
+        Compute $g^{(k)} = \bigtriangledown f(x^{(k)})$
+     }
+     \caption{Steepest Descent Algorithm}
+\end{algorithm}
+Steepest Descent Method has linear convergence rate generally.
+
+\subsection{Newton Method}
+
+Newton Method is also a Line Search Method.
+\begin{align}
+    f(x^{(k)} + s) \approx q^{(k)}(s) f(x^{(k)}) + g^{(k)^T} s
+     + \frac{1}{2} s^T G_k s
+\end{align}
+where $g^{(k)} = \bigtriangledown f(x^{(k)})$,
+$G_k = \bigtriangledown^2 f(x^{(k)})$.
+To minimize $q^{(k)}(s)$, we have
+\begin{align}
+    s = G_k^{-1} g^{(k)}
+\end{align}
+Notice that $G_k^{-1} g^{(k)}$ is the Newton Direction.
+\par
+\vspace{.3em}
+\noindent\textit{Analysis on quadratic function}
+\par
+For positive definite quadratic function
+\begin{align}
+    f(x) = \frac{1}{2} x^TGx - c^Tx
+\end{align}
+In this case, $\bigtriangledown^2 f(x) = G$.
+Let $H_0 = G^{-1}$, then we have
+\begin{align}
+    d^{(0)} &= H_0 \bigtriangledown f(x^{(0)}) \\
+    &= G^{-1} (Gx^{(0)} - c) \\
+    &= x^{(0)} - G^{-1}c \\
+    &= x^{(0)} - x^*
+\end{align}
+So that Newton Method can reach global optimal
+in $1$ iteration for quadratic functions.
+\par
+For general non-linear functions, if we follow
+\begin{align}
+    x^{(k+1)} = x^{(k)} - G_k^{-1} g^{(k)}
+\end{align}
+we called it Newton Method.
+\par
+\vspace{.3em}
+\noindent\textit{Convergence Rate of Newton Method}
+\begin{theorem}
+    $f \in \mathcal{C}^2$, $x^{(k)}$ is sufficiently closed
+    to optimal point $x^*$, where $\bigtriangledown f(x^*) = 0$.
+    If $\bigtriangledown^2 f(x^*)$ is positive definite, 
+    Hesse matrix of $f$ satisfies Lipschitz Condition, i.e.,
+    $\exists \beta >0$, such that for all $(i, j)$,
+    \begin{align}
+        | G_{ij}(x) - G_{ij}(y)| \leq \beta \parallel x - y \parallel
+    \end{align}
+    Then $\{x^{(k)}\} \rightarrow x^*$, and have quadratic
+    convergence rate.
+\end{theorem}
+\begin{proof}
+    Denote $g(x) = \bigtriangledown f(x)$, then we have
+    \begin{align}
+        g(x - h) = g(x) - G(x)h + O(\parallel h \parallel^2)
+    \end{align}
+    Let $x = x^{(k)}$, $h = h^{(k)} = x^{(k)} - x^*$, then
+    \begin{align}
+        g(x^*) = g(x^{(k)}) - G(x^{(k)})(h^{(k)})
+        + O(\parallel h^{(k)} \parallel^2) = 0
+    \end{align}
+    From Lipschitz Condition, we can easily get 
+    $G(x^{(k)})^{-1}$ is finite. Then we left multiply
+    $G(x^{(k)})^{-1}$ to Equation (66)
+    \begin{align}
+        0 &= G(x^{(k)})^{-1} g(x^{(k)}) - h^{(k)}
+         + O(\parallel h^{(k)} \parallel^2) \\
+        &= x^* - x^{(k)} + G(x^{(k)})^{-1} g(x^{(k)})
+         + O(\parallel h^{(k)} \parallel^2) \\
+         &= x^* - x^{(k+1)}
+         + O(\parallel h^{(k)} \parallel^2) \\
+         &= - h^{(k+1)} + O(\parallel h^{(k)} \parallel^2)
+    \end{align}
+    i.e.,
+    \begin{align}
+        \parallel h^{(k+1)} \parallel = O(\parallel h^{(k)} \parallel^2)
+    \end{align}
+\end{proof}
+
+\subsection{Quasi-Newton Methods}
+Newton Method has a fast convergence rate.
+However, Newton Method requires second-order derivative,
+if Hesse matrix is not positive definite, Newton Method
+might not work well.
+\par
+In order to overcome the above difficulties,
+Quasi-Newton Method is introduced.
+Its basic idea is that:
+Using second-order derivative free matrix $H_k$
+to approximate $G(x^{(k)})^{-1}$.
+Denote $s^{(k)} = x^{(k+1)} - x^{(k)}$,
+$y^{(k)} = \bigtriangledown f(x^{(k+1)}) - \bigtriangledown f(x^{(k)})$,
+then we have
+\begin{align}
+    \bigtriangledown^2 f(x^{(k)}) s^{(k)} \approx y^{(k)}
+\end{align}
+or
+\begin{align}
+    \bigtriangledown^2 f(x^{(k)})^{-1} y^{(k)} \approx s^{(k)}
+\end{align}
+So we need to construct $H_{k+1}$ such that
+\begin{align}
+    H_{k+1} y^{(k)} \approx s^{(k)}
+\end{align}
+or
+\begin{align}
+    y^{(k)} \approx B_{k+1} s^{(k)}
+\end{align}
+we called (74), (75) \textit{Quasi-Newton Conditions}
+or \textit{Secant Conditions}.
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{Cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n, H_0 = I, k:= 0$\;
+     \While{some conditions}{
+        $d^{(k)} = - H_kg^{(k)}$\;
+        solve $\min_{\alpha_k \geq 0} f(x^{(k)} + \alpha_k d^{(k)})$\;
+        $x^{(k+1)} = x^{(k)} + \alpha_kd^{(k)}$\;
+        generate $H_{k+1}$, $k:= k+1$
+     }
+     \caption{Quasi-Newton Algorithm}
+\end{algorithm}
+\vspace{.3em}
+\noindent\textbf{How to generate $H_k$}
+\par
+$H_k$ is the approximation matrix in $k$th iteration, we want to
+generate $H_{k+1}$ from $H_k$
+\par
+\vspace{.3em}
+\noindent\textit{Symmetric Rank 1}
+\par
+Assume
+\begin{align}
+    H_{k+1} = H_k + a \mathbf{u}\mathbf{u}^T,
+     \quad a \in \mathbb{R}, \mathbf{u} \in \mathbb{R}^n
+\end{align}
+From the Quasi-Newton Conditions, we have
+\begin{align}
+    H_{k+1} \mathbf{y}^{(k)} &= \mathbf{s}^{(k)} \\
+    H_k \mathbf{y}^{(k)} + a \mathbf{u}\mathbf{u}^T \mathbf{y}^{(k)}
+    &= \mathbf{s}^{(k)} \\
+    H_k \mathbf{y}^{(k)} + a \mathbf{u}^T\mathbf{y}^{(k)} \mathbf{u} 
+    &= \mathbf{s}^{(k)}
+\end{align}
+Let $\mathbf{u} = \mathbf{s}^{(k)} - H_k \mathbf{y}^{(k)}$, 
+$a = \frac{1}{\mathbf{u}^T \mathbf{y}}$,
+clearly this is a solution of the equation.
+Here we have
+\begin{align}
+    H_{k+1} = \frac{(\mathbf{s}^{(k)} - H_k \mathbf{y}^{(k)})
+    (\mathbf{s}^{(k)} - H_k \mathbf{y}^{(k)})^T}
+    {(\mathbf{s}^{(k)} - H_k \mathbf{y}^{(k)})^T \mathbf{y}^{(k)}}
+\end{align}
+(79) is \textit{Symmetric Rank 1 Update}.
+The problem of Symmetric Rank 1 Update is that
+the positive-definite property of $H_k$
+can not be preserved.
+
+\vspace{.3em}
+\par
+\noindent\textit{Symmetric Rank 2 Update}
+\par
+Assume
+\begin{align}
+    H_{k+1} = H_k + a \mathbf{u}\mathbf{u}^T +
+     b \mathbf{v}\mathbf{v}^T,
+     \quad a, b \in \mathbb{R}, \mathbf{u}, \mathbf{v} \in \mathbb{R}^n
+\end{align}
+such that Quasi-Newton Conditions stand.
+We can find a solution of $a, b, \mathbf{u}, \mathbf{v}$ that is
+\begin{align}
+    \left\{
+    \begin{array}{ll}
+        \mathbf{u} = \mathbf{s}^{(k)}, 
+        \quad a \mathbf{u}^T \mathbf{y} = 1 \\
+        \mathbf{v} = H_k \mathbf{y}^{(k)}, 
+        \quad b \mathbf{v}^T \mathbf{y} = -1
+    \end{array}
+    \right.
+\end{align}
+So that we have
+\begin{align}
+    H_{k+1} = H_k + \frac{\mathbf{s}^{(k)}\mathbf{s}^{(k)T}}
+    {\mathbf{s}^{(k)T} \mathbf{y}^{(k)}} - 
+    \frac{H_k\mathbf{y}^{(k)} \mathbf{y}^{(k)T} H_k}
+    {\mathbf{y}^{(k)T}H_k\mathbf{y}^{(k)}}
+\end{align}
+We called (83) the DFP (Davidon-Fletcher-Powell) update.
+\par
+From Quasi-Newton Condition (75), we can get the
+BFGS (Broyden-Fletcher-Goldfarb-Shanno) update
+\begin{align}
+    B_{k+1}^{(BFGS)} = B_k +
+    \frac{\mathbf{y}^{(k)}\mathbf{y}^{(k)T}}
+    {\mathbf{y}^{(k)T} \mathbf{s}^{(k)}}
+    - \frac{B_k \mathbf{s}^{(k)}\mathbf{s}^{(k)T} B_k}
+    {\mathbf{s}^{(k)T} B_k \mathbf{s}^{(k)}}
+\end{align}
+\vspace{.3em}
+\par\noindent\textit{Inverse of SR1 update}
+\begin{theorem}[Sherman-Morrison]
+    $A \in \mathbb{R}^n \times \mathbb{R}^n$ is a 
+    non-singular matrix, $\mathbf{u}, \mathbf{v} \in \mathbb{R}^n$.
+    If $1 + \mathbf{v}^TA^{-1}\mathbf{u} \neq 0$,
+    then SR1 update of $A$ is non-singular, and its inverse
+    can be represented as
+    \begin{align}
+        (A + a\mathbf{u}\mathbf{v}^T)^{-1} = 
+        A^{-1} - \frac{A^{-1}\mathbf{u}\mathbf{v}^TA^{-1}}
+        {1 + \mathbf{v}^TA^{-1}\mathbf{u}}
+    \end{align}
+\end{theorem}
+
+\subsection{Conjugate Gradient Method}
+\subsection{Trust Region Method}
 
 \end{document}
