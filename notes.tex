@@ -707,6 +707,191 @@ BFGS (Broyden-Fletcher-Goldfarb-Shanno) update
 \end{theorem}
 
 \subsection{Conjugate Gradient Method}
+\begin{definition}{Conjugate Direction.}
+    $G$ is a $n \times n$ positive definite matrix, 
+    \par\noindent for non-zero vector set
+    $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\} \in \mathbb{R}^n$,
+    if $\mathbf{d}^{(i)T} G \mathbf{d}^{(j)} = 0, (i \neq j)$,
+    then we called $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\}$
+    is \emph{G-Conjugate}.
+    \label{def:Conjugate}
+\end{definition}
+
+\begin{lemma}
+    For non-zero conjugate vector set 
+    $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\} \in \mathbb{R}^n$,
+    $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\}$ are linearly independent.
+\end{lemma}
+\begin{proof}
+    From Definition \ref{def:Conjugate}, we have
+    \begin{align}
+        \mathbf{d}^{(i)T} G \mathbf{d}^{(j)} = 0, \forall i, j, i \neq j
+    \end{align}
+    if $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\}$ is linearly dependent,
+    there exists 
+    \begin{align}
+        \mathbf{d}^{(t)} = \sum_{j=0}^k c_j \mathbf{d}^{(j)}
+    \end{align} 
+    then
+    \begin{align}
+        \mathbf{d}^{(t)T} G \mathbf{d}^{(i)} = 
+        \sum_{j=0}^k c_j \mathbf{d}^{(j)} G \mathbf{d}^{(i)}
+        = c_i \mathbf{d}^{(i)} G \mathbf{d}^{(i)} \neq 0
+    \end{align}
+    so that $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\}$
+    are linearly independent.
+    \qed
+    \label{lemma:Conjugate}
+\end{proof}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{Cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n$, positive definite matrix $G$, $k:= 0$\;
+     Construct $\mathbf{d}^{(0)}$ such that
+     $\mathbf{g}^{(0)T}\mathbf{d}^{(0)} < 0$\;
+     \While{some conditions}{
+        solve $\min_{\alpha_k \geq 0} f(\mathbf{x}^{(k)} + \alpha_k \mathbf{d}^{(k)})$\;
+        $\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)} + \alpha_k\mathbf{d}^{(k)}$\;
+        Construct $\mathbf{d}^{(k+1)}$ such that 
+        $\mathbf{d}^{(k+1)}G\mathbf{d}^{(j)} = 0, j = 0,..., k$.\;
+        $k:=k+1$
+     }
+     \caption{Conjuagte Gradient Algorithm}
+\end{algorithm}
+
+\begin{theorem}[Conjugate Gradient]
+    For strictly convex quadratic function 
+    \par\noindent
+    $f(\mathbf{x}) = \frac{1}{2} \mathbf{x}^T G \mathbf{x} + \mathbf{c}^T\mathbf{x}$,
+    apply conjugate gradient method combined with exact line search,
+    then $\mathbf{x}^{(k+1)}$ is the global minima in manifold
+    \begin{align}
+        \mathcal{V} =  \{ \mathbf{x} | \mathbf{x} = \mathbf{x}^{(0)} + 
+        \sum_{j=0}^k\beta_j\mathbf{d}^{(j)}, \forall \beta_j \in \mathbb{R} \}
+    \end{align}
+    \label{th:Conjugate}
+\end{theorem}
+\begin{proof}
+    Firstly, from Lemma \ref{lemma:Conjugate}, we have 
+    $\{ \mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\}$ are linearly independent.
+    So we only need to prove that 
+    for all $k < n$
+    \begin{align}
+        \mathbf{g}^{(k+1)T}\mathbf{d}^{(j)} = 0, j = 0,..., k
+    \end{align}
+    i.e., $\mathbf{g}^{(k+1)}$ is orthogonal with subspace
+    $span\{\mathbf{d}^{(0)}, ...,\mathbf{d}^{(k)}\}$.
+    \par
+    Due to the exact line search, $\forall j$
+    \begin{align}
+        \mathbf{g}^{(j+1)T}\mathbf{d}^{(j)} = 0
+    \end{align}
+    especially $\mathbf{g}^{(k+1)T}\mathbf{d}^{(k)} = 0$.
+    \par
+    Notice that 
+    \begin{align}
+        \mathbf{g}^{(k+1)} - \mathbf{g}^{(k)}
+        = G (\mathbf{x}^{(k+1)} - \mathbf{x}^{(k)})
+        = \alpha_k G \mathbf{d}^{(k)}
+    \end{align}
+    so that we have $\forall j \leq k$
+    \begin{align}
+        \mathbf{g}^{(k+1)T}\mathbf{d}^{(j)}
+        &= (\sum_{m=j+1}^k (\mathbf{g}^{(m+1)T} - \mathbf{g}^{(m)T})
+        + \mathbf{g}^{(j+1)T} )\mathbf{d}^{(j)} \\
+        &= \sum_{m=j+1} \alpha_m \mathbf{d}^{(m)T}G \mathbf{d}^{(j)}
+        + \mathbf{g}^{(j+1)T} \mathbf{d}^{(j)} \\
+        &= 0
+    \end{align}
+    \qed
+\end{proof}
+\begin{lemma}
+    For strictly convex quadratic function 
+    $f(\mathbf{x}) = \frac{1}{2} \mathbf{x}^T G \mathbf{x} + \mathbf{c}^T\mathbf{x}$,
+    apply conjugate gradient method combined with exact line search,
+    $\mathbf{g}(\mathbf{x}) = \bigtriangledown f(\mathbf{x}) = G\mathbf{x} + \mathbf{c}$,
+    we have
+    \begin{align}
+        \mathbf{g}^{(k)T}\mathbf{g}^{(j)} = 0, \forall j = 0,..., k-1
+    \end{align}
+    \label{lemma:Conjugate}
+\end{lemma}
+\begin{proof}
+    From Theorem \ref{th:Conjugate}, we have
+    \begin{align}
+        \mathbf{g}^{(k)T}\mathbf{g}^{(j)}
+        = \mathbf{g}^{(k)T} (-\mathbf{d}^{(j)} 
+        + \sum_{i=0}^{j-1}\beta_i^{(j)} \mathbf{d}^{(i)}) = 0
+    \end{align}
+    \qed
+\end{proof}
+\noindent\textbf{Quadratic function case}
+\par
+For $f(\mathbf{x}) = \frac{1}{2}\mathbf{x}^T G \mathbf{x} + \mathbf{c}^T x$,
+$G$ is a $n \times n$ positive definite matrix.
+\begin{align}
+    \mathbf{g}(\mathbf{x}) = G \mathbf{x} + \mathbf{c}
+\end{align}
+Set $\mathbf{d}^{(0)} = -\mathbf{g}^{(0)}$,
+exact line search for $\alpha_0$ such that 
+$\mathbf{g}^{(1)T}\mathbf{d}^{(0)} = 0$.
+Assume $\mathbf{d}^{(1)} = -\mathbf{g}^{(1)} + \beta_0^{(1)}\mathbf{d}^{(0)}$,
+select $\beta_0^{(1)}$ such that
+$ \mathbf{d}^{(1)} G \mathbf{d}^{(0)} = 0$
+\begin{align}
+    \beta_0^{(1)} = \frac{\mathbf{g}^{(1)T}\mathbf{g}^{(1)}}
+    {\mathbf{g}^{(0)T}\mathbf{g}^{(0)}}
+\end{align}
+\begin{proof}
+    From (92), we have
+    \begin{align}
+        &\mathbf{d}^{(1)T} G \mathbf{d}^{(0)} = 0 \\
+        \Leftrightarrow \quad&\mathbf{d}^{(1)T}
+        (\mathbf{g}^{(1)} - \mathbf{g}^{(0)}) = 0 \\
+        \Leftrightarrow  \quad&(\mathbf{g}^{(1)} + 
+        \beta_0^{(1)}\mathbf{g}^{(0)})^T
+        (\mathbf{g}^{(1)} - \mathbf{g}^{(0)}) = 0 \\
+        \Leftrightarrow \quad&\mathbf{g}^{(1)T}\mathbf{g}^{(1)}
+        - \beta_0^{(1)}\mathbf{g}^{(0)T}\mathbf{g}^{(0)} = 0 \\
+        \Leftrightarrow \quad&\beta_0^{(1)} = 
+        \frac{\mathbf{g}^{(1)T}\mathbf{g}^{(1)}}
+        {\mathbf{g}^{(0)T}\mathbf{g}^{(0)}}
+    \end{align}
+    \qed
+\end{proof}
+    Generally, we can select $\beta_j^{(k)}$ such that
+    $\mathbf{d}^{(k)T} G \mathbf{d}^{(j)} = 0, j=0, 1,..., k-1$
+    that is
+    \begin{align}
+        \mathbf{d}^{(k)T} G \mathbf{d}^{(j)} &= 0 \\
+        (-\mathbf{g}^{(k)T} + \sum_{i=0}^{k-1} \beta_i^{(k)} \mathbf{d}^{(i)T})
+        G \mathbf{d}^{(j)} &= 0 \\
+        -\mathbf{g}^{(k)T} G \mathbf{d}^{(j)}
+        + \beta_j^{(k)}\mathbf{d}^{(j)T} G \mathbf{d}^{(j)} &= 0
+    \end{align}
+    so we have
+    \begin{align}
+        \beta_j^{(k)} = \frac{\mathbf{g}^{(k)T} G \mathbf{d}^{(j)}}
+        {\mathbf{d}^{(j)T} G \mathbf{d}^{(j)}}
+        = \frac{\mathbf{g}^{(k)T} (\mathbf{g}^{(j+1)} - \mathbf{g}^{(j)})}
+        {\mathbf{d}^{(j)T}(\mathbf{g}^{(j+1)} - \mathbf{g}^{(j)})}
+    \end{align}
+    From Lemma \ref{lemma:Conjugate}, we have 
+    \begin{align}
+        \mathbf{g}^{(k)T}\mathbf{g}^{(j)} = 0, \forall j = 0,..., k-1
+    \end{align}
+    So
+    \begin{align}
+        \beta_j^{(k)} &= 0, j = 0,...,k-2 \\
+        \beta_{k-1}^{(k)} &= \frac{\mathbf{g}^{(k)T} (\mathbf{g}^{(k)}}{\mathbf{g}^{(k-1)T} (\mathbf{g}^{(k-1)}}
+    \end{align}
+
 \subsection{Trust Region Method}
 
+\clearpage
+\section{Constrained Optimization}
+\subsection{Quadratic Programming}
+\subsection{Non-linear Constrained Optimization}
 \end{document}
