@@ -1,0 +1,45 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction to Optimization Algorithms}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Goal of the Course}{chapter.1}% 2
+\BOOKMARK [1][-]{section.1.2}{Basic Concepts}{chapter.1}% 3
+\BOOKMARK [2][-]{subsection.1.2.1}{Problem Definition}{section.1.2}% 4
+\BOOKMARK [1][-]{section.1.3}{Optimal Conditions}{chapter.1}% 5
+\BOOKMARK [2][-]{subsection.1.3.1}{Unconstrained Optimization}{section.1.3}% 6
+\BOOKMARK [2][-]{subsection.1.3.2}{Constrained Optimization}{section.1.3}% 7
+\BOOKMARK [1][-]{section.1.4}{Descent function}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.5}{Convergence of Algorithm}{chapter.1}% 9
+\BOOKMARK [2][-]{subsection.1.5.1}{Search Methods}{section.1.5}% 10
+\BOOKMARK [0][-]{chapter.2}{Unconstrained Optimization}{}% 11
+\BOOKMARK [1][-]{section.2.1}{Gradient Based Methods}{chapter.2}% 12
+\BOOKMARK [2][-]{subsection.2.1.1}{Determine Search Direction}{section.2.1}% 13
+\BOOKMARK [2][-]{subsection.2.1.2}{Determine Step Factor \205 Line Search}{section.2.1}% 14
+\BOOKMARK [2][-]{subsection.2.1.3}{Global Convergence}{section.2.1}% 15
+\BOOKMARK [2][-]{subsection.2.1.4}{Steepest Descent Method}{section.2.1}% 16
+\BOOKMARK [2][-]{subsection.2.1.5}{Newton Method}{section.2.1}% 17
+\BOOKMARK [2][-]{subsection.2.1.6}{Quasi-Newton Method}{section.2.1}% 18
+\BOOKMARK [2][-]{subsection.2.1.7}{Conjugate Gradient Method}{section.2.1}% 19
+\BOOKMARK [1][-]{section.2.2}{Trust Region Method}{chapter.2}% 20
+\BOOKMARK [2][-]{subsection.2.2.1}{Trust Region Subproblem}{section.2.2}% 21
+\BOOKMARK [2][-]{subsection.2.2.2}{How to select ek}{section.2.2}% 22
+\BOOKMARK [0][-]{chapter.3}{Constrained Optimization}{}% 23
+\BOOKMARK [1][-]{section.3.1}{Quadratic Programming}{chapter.3}% 24
+\BOOKMARK [2][-]{subsection.3.1.1}{Solution of Quadratic Programming}{section.3.1}% 25
+\BOOKMARK [2][-]{subsection.3.1.2}{Equality Constrained Quadratic Programming}{section.3.1}% 26
+\BOOKMARK [2][-]{subsection.3.1.3}{General Quadratic Programming}{section.3.1}% 27
+\BOOKMARK [1][-]{section.3.2}{Equality Constrained Problem}{chapter.3}% 28
+\BOOKMARK [2][-]{subsection.3.2.1}{Lagrange-Newton method}{section.3.2}% 29
+\BOOKMARK [2][-]{subsection.3.2.2}{Sequential Quadratic Programming method}{section.3.2}% 30
+\BOOKMARK [1][-]{section.3.3}{General Nonlinear Constrained Problem}{chapter.3}% 31
+\BOOKMARK [2][-]{subsection.3.3.1}{Sequential Quadratic Programming method}{section.3.3}% 32
+\BOOKMARK [2][-]{subsection.3.3.2}{Penalty method}{section.3.3}% 33
+\BOOKMARK [2][-]{subsection.3.3.3}{Extended Lagrange function method}{section.3.3}% 34
+\BOOKMARK [2][-]{subsection.3.3.4}{Barrier method}{section.3.3}% 35
+\BOOKMARK [0][-]{chapter.4}{Convex Optimization}{}% 36
+\BOOKMARK [1][-]{section.4.1}{Convex set}{chapter.4}% 37
+\BOOKMARK [1][-]{section.4.2}{Convex function}{chapter.4}% 38
+\BOOKMARK [1][-]{section.4.3}{Convex optimization}{chapter.4}% 39
+\BOOKMARK [2][-]{subsection.4.3.1}{Quadratically constrained quadratic program}{section.4.3}% 40
+\BOOKMARK [2][-]{subsection.4.3.2}{Second-order cone program}{section.4.3}% 41
+\BOOKMARK [0][-]{chapter.5}{Sparse Optimization}{}% 42
+\BOOKMARK [1][-]{section.5.1}{Compressed Sensing}{chapter.5}% 43
+\BOOKMARK [2][-]{subsection.5.1.1}{Problem formulation}{section.5.1}% 44
+\BOOKMARK [2][-]{subsection.5.1.2}{Pursuit Algorithms}{section.5.1}% 45

@@ -1,0 +1,83 @@
+% This is a template root file for Morgan & Claypool ACM books.
+% Please see read-me.txt for details.
+
+\documentclass[times]{cls/mcp-acm}
+
+\usepackage{amsmath}    % Package for AMS math extensions.
+\usepackage{graphicx}   % Package for importing EPS files.
+
+% IGC
+\usepackage{xcolor}
+\usepackage{lscape}
+\usepackage{soul}
+
+% my styles
+% chap 01
+\usepackage[ruled,vlined]{algorithm2e}
+% \usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{color}
+\usepackage{upgreek}
+\usepackage{mathtools} % loads amsmath
+
+% chap02
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathrsfs}
+\usepackage{caption}
+\usepackage{amssymb}
+
+
+\usepackage{amsthm}
+% \theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\usepackage{wrapfig}
+\usepackage{algpseudocode}
+
+\graphicspath{{./chap02/}, {./chap03/}, {./chap04/},
+ {./chap05/}}
+
+% chap03
+\usepackage[tight,footnotesize]{subfigure}
+\usepackage{multirow}
+
+\makeindex              % if you use \index{...} in your book.
+
+\includeonly{front/front,chap01/chap01,
+chap02/chap02,chap03/chap03,chap04/chap04,
+chap05/chap05,
+appa/appa,bio/bio}
+
+\begin{document}
+
+\frontmatter
+\title{Optimization Algorithm Notes}
+\author{Depu Meng}
+% \institute{Feb. $2019$}
+
+
+\maketitle
+%\include{front}         % Front matter.
+\tableofcontents
+%
+\mainmatter
+\include{chap01/chap01}        % Chapter 1.
+\include{chap02/chap02}
+\include{chap03/chap03}
+\include{chap04/chap04}
+\include{chap05/chap05}
+%\include{appa}        % Appendix A.
+%
+% \backmatter
+% \bibliography{chap01/chap01}
+%\include{bio}           % Author(s) biographies.
+%\include{book.ind}      % If the book has an index.
+
+\end{document}

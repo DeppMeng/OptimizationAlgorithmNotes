@@ -1,0 +1,65 @@
+\chapter{Sparse Optimization}
+\vspace{1em}
+\section{Compressed Sensing}
+\subsection{Problem formulation}
+\begin{align}
+    (\textnormal{P}_0) \quad
+    \begin{array}{ll}
+        \min_{\mathbf{x} \in \mathbb{R}^n}
+        \ &\parallel \mathbf{x} \parallel_0 \\
+        s.t. \ &A\mathbf{x} = \mathbf{b}
+    \end{array}
+\end{align}
+The definition above means to find
+the sparsest solution for underdetermined
+linear equation
+$A\mathbf{x} = \mathbf{b}$
+($A\in \mathbb{R}^{m\times n}, m << n$).
+\begin{definition}[spark]
+    The \emph{spark} of a given matrix $A$
+    is the smallest number of columns
+    from $A$ that are linearly
+    dependent.
+\end{definition}
+\begin{theorem}
+    If a system of linear euqations
+    $A\mathbf{x} = \mathbf{b}$ has
+    a solution $\mathbf{x}$ obeying
+    $\parallel \mathbf{x} \parallel_0
+    < \frac{spark(A)}{2}$,
+    this solution is necessarily
+    the sparsest possible.
+\end{theorem}
+\begin{definition}
+    The mutual coherence of a given matrix $A$
+    is the largest absolute normalized inner
+    product between different columns from $A$.
+    Denoting the $k$-th column in $A$ by $\mathbf{a}_k$,
+    the mutual coherence is given by
+    \begin{align}
+        \mu(A) = \max_{1\leq i \neq j \leq n}
+        \frac{|\mathbf{a}_i^T\mathbf{a}_j|}
+        {\parallel\mathbf{a}_i\parallel_2
+        \parallel\mathbf{a}_j\parallel_2}
+    \end{align}
+\end{definition}
+\begin{lemma}
+    For any matrix $A \in \mathbb{R}^{m\times n}$,
+    the following relationship holds:
+    \begin{align}
+        spark(A) \geq 1 + \frac{1}{\mu(A)}
+    \end{align}
+\end{lemma}
+Then we have the following theorem:
+\begin{theorem}
+    If a system of linear euqations
+    $A\mathbf{x} = \mathbf{b}$ has
+    a solution $\mathbf{x}$ obeying
+    $\parallel \mathbf{x} \parallel_0
+    < (1 + \frac{1}{\mu(A)})/2$,
+    this solution is necessarily
+    the sparsest possible.
+\end{theorem}
+\subsection{Pursuit Algorithms}
+\subsubsection{Orthogonal Matching Pursuit}
+\subsubsection{Basis Pursuit}

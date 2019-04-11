@@ -889,9 +889,619 @@ $ \mathbf{d}^{(1)} G \mathbf{d}^{(0)} = 0$
     \end{align}
 
 \subsection{Trust Region Method}
+Previously, we use a direction search strategy
+to determine a search direction, then use line
+search method to determine step length.
+\par
+Now we discuss a new global convergence strategy --
+Trust-Region Method.
+\begin{definition}[Trust Region]
+    \begin{align}
+        \Omega_k = \{ \mathbf{x} \in \mathbb{R}^n \ | \ \parallel
+        \mathbf{x} - \mathbf{x}^{(k)} \parallel \leq e_k  \}
+    \end{align}
+    We called $\Omega_k$ \emph{Trust Region}, $e_k$ is the \emph{Trust radius}.
+\end{definition}
+
+Suppose in this neighborhood, quadratic model $q^{(k)}(\mathbf{s})$
+is a proper approximation of $f(\mathbf{x})$.
+We minimize the quadratic model in trust region, derive
+approximate minima $\mathbf{s}^{(k)}$,
+and set $\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)} + \mathbf{s}^{(k)}$.
+\par
+\noindent\textbf{Trust Region Subproblem}
+\begin{align}
+    \min_{\parallel \mathbf{s} \parallel \leq e_k} q^{(k)}(\mathbf{s})
+     = f(\mathbf{x}^{(k)}) + \mathbf{g}^{(k)T}\mathbf{s}
+    + \frac{1}{2} \mathbf{s}^T B_k \mathbf{s}
+\end{align}
+
+Where $\mathbf{s} = \mathbf{x} - \mathbf{x}^{(k)}$,
+$\mathbf{g}^{(k)} = \bigtriangledown f(\mathbf{x}^{(k)})$,
+$B_k = \bigtriangledown^2 f(\mathbf{x}^{(k)})$.
+$e_k$ is the trust region radius.
+
+\par
+\noindent\textbf{How to select $e_k$}
+\par
+Denote the solution of the subproblem as $\mathbf{s}^{(k)}$,
+then let
+\begin{align}
+    \textnormal{Act}_k = f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k)} + \mathbf{s}^{(k)}) \\
+    \textnormal{Pre}_k = q^{(k)}(\mathbf{0}) - q^{(k)}(\mathbf{s}^{(k)}) 
+\end{align}
+
+Define
+\begin{align}
+    r_k = \frac{\textnormal{Act}_k}{\textnormal{Pre}_k}
+    = \frac{f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k)} + \mathbf{s}^{(k)})}
+    {q^{(k)}(\mathbf{0}) - q^{(k)}(\mathbf{s}^{(k)})}
+\end{align}
+
+to measure the difference between objective function
+and the quadratic approximate model.
+\par
+We can update $e_k$ according to $r_k$. If $r_k$ is too small,
+that means our model can not fit the objective function well,
+so we need to decrease $e_k$. If $r_k$ is close to $1$,
+that means out model is good and we can increase $r_k$.
+Set the parameters $0 < \gamma_1 < \gamma_2 < 1$ and 
+$0 < \eta_1 < 1 < \eta_2$, we can have the following update
+rule
+\begin{align}
+    e_{k+1} = \left\{
+        \begin{array}{lll}
+            &\eta_1 e_k &\textnormal{if} \ r_k < \gamma_1 \\
+            &e_k &\textnormal{if} \ \gamma_1 < r_k < \gamma_2 \\
+            &\min(\eta_2 e_k, \bar{e}) \quad &\textnormal{if} \ r_k \geq \gamma_2
+        \end{array}\right.
+\end{align}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \KwData{Cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n$, $e_0 \in (0, \bar{e})$, $\epsilon > 0$,
+     $0 < \gamma_1 < \gamma_2 < 1$, $0 < \eta_1 < 1 < \eta_2$, $k:= 0$\;
+     \While{$\parallel \mathbf{g}^{(k)} \parallel \geq \epsilon$}{
+        solve the subproblem to derive $\mathbf{s}^{(k)}$\;
+        calculate $r_k$, update $\mathbf{x}$\;
+        \eIf{$r_k > 0$}
+        {$\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)} + \mathbf{s}^{(k)}$}
+        {$\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)}$}
+        update $e_k$ following (117)\;
+        $k:=k+1$\;
+     }
+     \caption{Trust Region Algorithm}
+\end{algorithm}
+
+
+
+
+
+
+
+
+
 
 \clearpage
 \section{Constrained Optimization}
 \subsection{Quadratic Programming}
+
+\begin{align}
+    \min \ Q(\mathbf{x}) &= \frac{1}{2}\mathbf{x}^T G\mathbf{x} + \mathbf{c}^T \mathbf{x}) \\
+    s.t. \ \ \mathbf{a}_i^T \mathbf{x} &= b_i, i \in \mathcal{E} = \{1,...,m_e \} \\
+    \mathbf{a}_i^T \mathbf{x} &\geq b_i, i \in \mathcal{I} = \{m_e+1,...,m \}
+\end{align}
+
+We assume that $G$ is a symmetric matrix and $\mathbf{a}_i, i \in \mathcal{E}$
+be linearly independent.
+
+\par
+\noindent\textbf{Solution of Quadratic Programming}
+\par
+If $G$ be positive semi-definite matrix, the 
+Quadratic Programming problem is a convex optimization
+problem, so any of its local minima is a global minima.
+\par
+If $G$ be positive definite matrix, the
+solution to the Quadratic Programming problem
+is unique, if exists.
+\par
+If $G$ be indefinite, there is no guarantee to the solution.
+
+\par
+\noindent\textbf{Equality Constrained Quadratic Programming}
+\begin{align}
+    \min \ Q(\mathbf{x}) &= \frac{1}{2}\mathbf{x}^T G\mathbf{x} + \mathbf{c}^T \mathbf{x} \\
+    s.t. \ \ A \mathbf{x} &= \mathbf{b}
+\end{align}
+
+\par
+\noindent\textbf{General Quadratic Programming}
+\begin{align}
+    \min \ Q(\mathbf{x}) &= \frac{1}{2}\mathbf{x}^T G\mathbf{x} + \mathbf{c}^T \mathbf{x}) \\
+    s.t. \ \ \mathbf{a}_i^T \mathbf{x} &= b_i, i \in \mathcal{E} = \{1,...,m_e \} \\
+    \mathbf{a}_i^T \mathbf{x} &\geq b_i, i \in \mathcal{I} = \{m_e+1,...,m \}
+\end{align}
+
+The idea is to remove or transform the inequality constraints.
+If the inequality constraint is not active near the solution,
+we can ignore the constraint; For the active inequality constraints,
+we can use equality constraints to replace them.
+
+\begin{theorem}[Active Set]
+    Denote $\mathbf{x}^*$ as a local minima of general quadratic
+    problem \emph{(123)}, then $\mathbf{x}^*$ must be a local minima of
+    the equality constrained problem
+    \begin{align}
+        (\textnormal{EQ})\left\{
+            \begin{array}{ll}
+                \min \ Q(\mathbf{x}) &= \frac{1}{2} \mathbf{x}^T G\mathbf{x}
+                + \mathbf{c}^T\mathbf{x} \\
+                s.t. \ \ \mathbf{a}_i^T\mathbf{x} &= b_i, i \in \mathcal{E}
+                \cup \mathcal{I}(\mathbf{x}^*)
+            \end{array}
+        \right.
+    \end{align}
+    Meanwhile, if $\mathbf{x}^*$ is a feasible point of \emph{(123)},
+    and the K-T point of (EQ), $\lambda^* \geq 0, i \in \mathcal{I}(\mathbf{x}^*)$,
+    then $\mathbf{x}^*$ must be the K-T point of \emph{(123)}.
+\end{theorem}
+\begin{proof}
+    Recall the K-T condition, we can get that
+    there exists $\lambda_i \geq 0, i \in I(\mathbf{x}^*)$ and $\mu_j$ s.t.
+    \begin{align}
+        \bigtriangledown Q(\mathbf{x}^*) - \sum_{i\in I(\mathbf{x}^*)} \lambda_i \mathbf{a}_i
+        - \sum_{j \in \mathcal{E}} \mu_j \mathbf{a}_j = 0
+    \end{align}
+    the K-T condition of (EQ) is there exists $\lambda_i, i \in \mathcal{E} \cup \mathcal{I}(\mathbf{x}^*)$,
+    s.t.
+    \begin{align}
+        \bigtriangledown Q(\mathbf{x}^*)
+        - \sum_{j \in \mathcal{E} \cup \mathcal{I}(\mathbf{x}^*)} \lambda_j \mathbf{a}_j = 0
+    \end{align}
+    Appearently If $\mathbf{x}^*$ satisfies (127), then it also satisfies (128).
+    On the other hand, if $\mathbf{x}^*$ satisfies (128) and $\lambda_i \geq 0, i \in I(\mathbf{x}^*)$,
+    we have
+    \begin{align}
+        &\bigtriangledown Q(\mathbf{x}^*)
+        - \sum_{j \in \mathcal{E} \cup \mathcal{I}(\mathbf{x}^*)} \lambda_j \mathbf{a}_j = 0 \\
+        \Leftrightarrow \ &
+        \bigtriangledown Q(\mathbf{x}^*) - \sum_{i\in I(\mathbf{x}^*)} \lambda_i \mathbf{a}_i
+        - \sum_{j \in \mathcal{E}} \lambda_j \mathbf{a}_j = 0
+    \end{align}
+    i.e., $\mathbf{x}^*$ satisfies (127).
+    \qed
+\end{proof}
+
 \subsection{Non-linear Constrained Optimization}
+\noindent\textbf{Equality Constrained Problem}
+\par
+\emph{Lagrange-Newton method}
+\par
+\begin{align}
+    \min \ &f(\mathbf{x}) \\
+    s.t. \ &\mathbf{c}(\mathbf{x}) = \mathbf{0}
+\end{align}
+where $\mathbf{c}(\mathbf{x}) = (c_1(\mathbf{x}),..., c_m(\mathbf{x}))^T$.
+\par
+Denote $A(\mathbf{x}) = [\bigtriangledown\mathbf{c}(\mathbf{x})]^T 
+= (\bigtriangledown c_1(\mathbf{x}),..., \bigtriangledown c_m(\mathbf{x}))^T$.
+The K-T condition of the problem is there exists
+$\mathbf{\lambda} \in \mathbb{R}^m$ s.t.
+\begin{align}
+    \bigtriangledown f(\mathbf{x}) - A(\mathbf{x})^T \mathbf{\lambda} = \mathbf{0}
+\end{align}
+and $\mathbf{c}(\mathbf{x}) = \mathbf{0}$.
+\par
+We can use Newton-Raphson method to solve the equations by
+\begin{align}
+    \left(\begin{array}{ll}
+        W(\mathbf{x}, \mathbf{\lambda}) & -A(\mathbf{x})^T \\
+        -A(\mathbf{x}) & 0
+    \end{array}\right)
+    \left(\begin{array}{ll}
+        \delta_{x} \\
+        \delta_\lambda
+    \end{array}\right) = -
+    \left(
+        \begin{array}{ll}
+            \bigtriangledown f(\mathbf{x}) - A(\mathbf{x})^T \mathbf{\lambda} \\
+            \mathbf{c}(\mathbf{x})
+        \end{array}\right)
+\end{align}
+where $W(\mathbf{x}, \mathbf{\lambda}) = \bigtriangledown^2 f(\mathbf{x})
+- \sum_{i=1}^m \lambda_i \bigtriangledown^2 c_i(\mathbf{x})$.
+\par
+We called the method above as \emph{Lagrange-Newton Method}.
+\par
+Here we can define 
+\begin{align}
+    \psi(\mathbf{x}, \lambda) = \parallel \bigtriangledown f(\mathbf{x})
+    - A(\mathbf{x})^T\lambda \parallel^2 + \parallel\mathbf{c}(\mathbf{x})
+    \parallel^2
+\end{align}
+so that $\psi$ is a descent function to Lagrange-Newton method.
+\begin{align}
+    \bigtriangledown \psi(\mathbf{x}, \lambda)^T
+    \left(\begin{array}{ll}
+        \delta_{x} \\
+        \delta_\lambda
+    \end{array}\right) = 
+    -2 \psi(\mathbf{x}, \lambda) \neq 0
+\end{align}
+\par
+\emph{Sequential Quadratic Programming method}
+\par
+(134) can be rewritten into
+\begin{align}
+    \left\{
+        \begin{array}{ll}
+            W(\mathbf{x}, \lambda) \delta_x + \bigtriangledown f(\mathbf{x})
+            &= A(\mathbf{x})^T(\lambda + \delta_\lambda) \\
+            \mathbf{c}(\mathbf{x}) + A(\mathbf{x})\delta_x &= \mathbf{0}
+        \end{array}
+        \right.
+\end{align}
+From K-T condition, we notice that $\delta_x$ is the
+K-T point of the following Quadratic Programming problem
+\begin{align}
+    \min \ &\frac{1}{2} \mathbf{d}^T W(\mathbf{x}, \lambda) \mathbf{d}
+    + \bigtriangledown f(\mathbf{x})^T\mathbf{d} \\
+    s.t. \ &\mathbf{c}(\mathbf{x}) + A(\mathbf{x})\mathbf{d} = 0
+\end{align}
+
+So we can solve a Quadratic Programming subproblem to
+derive $\delta_x$, we called this method
+\emph{Sequential Quadratic Programming}.
+
+\par
+\noindent\textbf{General Nonlinear Constrained Problem}
+\par
+\emph{Sequential Quadratic Programming method}
+\par
+\begin{align}
+    \min \ &f(\mathbf{x}) \\
+    s.t. \ &c_i(\mathbf{x}) = 0, \quad i \in \mathcal{E} = \{1,...,m_e\} \\
+    &c_i(\mathbf{x}) \geq 0, \quad i \in \mathcal{I} = \{m_e+1,...,m\}
+\end{align}
+Similarly, we can construct subproblem
+\begin{align}
+    \min \ &\frac{1}{2}\mathbf{d}^TW\mathbf{d} + \mathbf{g}^T\mathbf{d} \\
+    s.t. \ &c_i(\mathbf{x}) + \mathbf{a}_i(\mathbf{x})^T\mathbf{d} = 0, i \in \mathcal{E} \\
+     &c_i(\mathbf{x}) + \mathbf{a}_i(\mathbf{x})^T\mathbf{d} \geq 0, i \in \mathcal{I}
+\end{align}
+Here, $W$ is the Hesse matrix (or its approximation) of the Lagrange
+function of (140), $\mathbf{g} = \bigtriangledown f(\mathbf{x})$,
+$A(\mathbf{x}) = (\mathbf{a}_1(\mathbf{x}),...,\mathbf{a}_m(\mathbf{x})$.
+
+Denote the solution to subproblem (143) as $\mathbf{d}$,
+the corresponding Lagrange multiplier vector $\bar{\lambda}$,
+so we have
+\begin{align}
+    \left\{
+        \begin{array}{llll}
+            &W\mathbf{d} + \mathbf{g} = A(\mathbf{x})^T\bar{\lambda} \\
+            &\bar{\lambda}_i \geq 0, i \in \mathcal{I} \\
+            &\mathbf{c}(\mathbf{x}) + A(\mathbf{x})\mathbf{d} = 0, i \in \mathcal{E} \\
+            &\mathbf{c}(\mathbf{x}) + A(\mathbf{x})\mathbf{d} \geq 0, i \in \mathcal{I}
+        \end{array}\right.
+\end{align}
+
+\par
+\emph{Penalty method}
+\par
+For nonlinear constrained porblem (140),
+we can use objective function $f(\mathbf{x})$
+and constraint function $\mathbf{c}(\mathbf{x})$
+to construct \emph{Penalty function}
+\begin{align}
+    P(\mathbf{x}) = P(f(\mathbf{x}), \mathbf{c}(\mathbf{x}))
+\end{align}
+
+We need the penalty function have the property that:
+for feasible points, $P(\mathbf{x}) = f(\mathbf{x})$,
+otherwise, $P(\mathbf{x}) > f(\mathbf{x})$.
+\par
+To measure the destructiveness to the constraints,
+we define $\mathbf{c}(\mathbf{x})\_$
+\begin{align}
+    \left\{
+        \begin{array}{ll}
+            c_i(\mathbf{x})\_ &= c_i(\mathbf{x}), \quad \quad \quad \quad \quad i\in \mathcal{E} \\
+            c_i(\mathbf{x})\_ &= |\min \{ 0, c_i(\mathbf{x}) \}|,\ \ i \in \mathcal{I}
+        \end{array}\right.
+\end{align}
+
+Consider simple penalty function
+\begin{align}
+    P_\sigma(\mathbf{x}) = f(\mathbf{x}) + 
+    \sigma \parallel \mathbf{c}(\mathbf{x})\_ \parallel^2
+\end{align}
+Denote $\mathbf{x}(\sigma)$ as the solution to unconstrained
+problem $\min P_\sigma(\mathbf{x})$, we have the following lemma:
+
+\begin{lemma}[Penalty method]
+    If $\mathbf{x}(\sigma)$ is a feasible point of nonlinear
+    constrained problem \textnormal{(140)}, then $\mathbf{x}(\sigma)$
+    aslo is the solution to \textnormal{(140)}.
+\end{lemma}
+
+\begin{proof}
+    From the definition of penalty function,
+    we have $P(\mathbf{x}) = f(\mathbf{x})$,
+    $\mathbf{x} \in \mathcal{S}$.
+    If $\mathbf{x}(\sigma)$ is the solution to 
+    $\min P(\mathbf{x})$, i.e.,
+    \begin{align}
+        P(\mathbf{x}(\sigma)) &\leq P(\mathbf{x}_0), \ \forall
+        \mathbf{x}_0 \in \mathbb{R}^{n} \\
+        f(\mathbf{x}(\sigma)) &\leq f(\mathbf{x}_0), \ \forall
+        \mathbf{x}_0 \in \mathcal{S}
+    \end{align}
+that is, $\mathbf{x}(\sigma)$ is the solution to (140).
+\qed
+\end{proof}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Return}{return}
+    \KwData{Cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n$, $\sigma_0 > 0$, $\beta > 1$,
+     $\epsilon > 0$, $k:= 0$\;
+     \While{$\parallel \mathbf{c}(\mathbf{x}(\sigma_{k-1}))\_ \parallel \geq \epsilon$}{
+        solve the subproblem $\min_{\mathbf{x}\in \mathbb{R}^n} P_{\sigma_k}(\mathbf{x})$
+        to get the solution $\mathbf{x}(\sigma_k)$\;
+        $\mathbf{x}^{(k+1)} = \mathbf{x}(\sigma_k)$,
+        $\sigma_{k+1} = \beta \sigma_k$\;
+        $k:=k+1$\;
+     }
+     \Return{$\mathbf{x}(\sigma_{k-1})$}
+     \caption{Penalty Method Algorithm}
+\end{algorithm}
+
+\begin{theorem}[Convergence of Penalty method]
+    If $\epsilon > \min_{\mathbf{x} \in \mathbb{R}^n}
+    \parallel \mathbf{c}(\mathbf{x})\_ \parallel$,
+    then the algorithm can terminate in finite steps.
+\end{theorem}
+
+\begin{lemma}
+    Let $\sigma_{k+1} > \sigma_k > 0$, then we have
+    $P_{\sigma_k}(\mathbf{x}(\sigma_k)) \leq P_{\sigma_{k+1}}(\mathbf{x}(\sigma_{k+1}))$,
+    $\parallel \mathbf{c}(\mathbf{x}(\sigma_k))\_ \parallel
+    \geq \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ \parallel$,
+    $f(\mathbf{x}(\sigma_k)) \leq f(\mathbf{x}(\sigma_{k+1}))$.
+\end{lemma}
+\begin{proof}
+    \begin{align}
+        P_{\sigma_{k+1}}(\mathbf{x}(\sigma_{k+1}))
+        &= f(\mathbf{x}(\sigma_{k+1})) + 
+        \sigma_{k+1} \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ \parallel^2 \\
+        &\geq f(\mathbf{x}(\sigma_{k+1})) + 
+        \sigma_{k} \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ \parallel^2 \\
+        &\geq \min_{\mathbf{x} \in \mathbb{R}^n} f(\mathbf{x}) + 
+        \sigma_{k} \parallel \mathbf{c}(\mathbf{x})\_ \parallel^2 \\
+        &= P_{\sigma_k}(\mathbf{x}(\sigma_k))
+    \end{align}
+    From the definition, we have
+    \begin{align}
+        &f(\mathbf{x}(\sigma_{k})) + 
+        \sigma_{k+1} \parallel \mathbf{c}(\mathbf{x}(\sigma_{k}))\_ 
+        \parallel^2 \\
+        \geq 
+        &f(\mathbf{x}(\sigma_{k+1})) + 
+        \sigma_{k+1} \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ 
+        \parallel^2 \\
+        \geq 
+        &f(\mathbf{x}(\sigma_{k+1})) + 
+        \sigma_{k} \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ 
+        \parallel^2 \\
+        \geq 
+        &f(\mathbf{x}(\sigma_{k})) + 
+        \sigma_{k} \parallel \mathbf{c}(\mathbf{x}(\sigma_{k}))\_ 
+        \parallel^2
+    \end{align}
+    From the inequalities above, we have
+    \begin{align}
+        &\sigma_{k} (\parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ 
+        \parallel^2 - \parallel \mathbf{c}(\mathbf{x}(\sigma_{k}))\_ 
+        \parallel^2) \\
+        \leq
+        &f(\mathbf{x}(\sigma_{k+1})) - f(\mathbf{x}(\sigma_{k})) \\
+        \leq 
+        & \sigma_{k+1} (\parallel \mathbf{c}(\mathbf{x}(\sigma_{k}))\_ 
+        \parallel^2 - \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ 
+        \parallel^2)
+    \end{align}
+    So that
+    \begin{align}
+        \parallel \mathbf{c}(\mathbf{x}(\sigma_{k}))\_ 
+        \parallel \geq \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ 
+        \parallel
+    \end{align}
+    Then
+    \begin{align}
+        0\leq \sigma_{k} (\parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ 
+        \parallel^2 - \parallel \mathbf{c}(\mathbf{x}(\sigma_{k}))\_ 
+        \parallel^2)
+        \leq
+        f(\mathbf{x}(\sigma_{k+1})) - f(\mathbf{x}(\sigma_{k}))
+    \end{align}
+    i.e.,
+    \begin{align}
+        f(\mathbf{x}(\sigma_{k+1})) \geq f(\mathbf{x}(\sigma_{k}))
+    \end{align}
+    \qed
+\end{proof}
+
+\begin{lemma}
+    Denote $\bar{\mathbf{x}}$ as the solution to
+    problem \emph{(140)}, then for all
+    $\sigma_k>0$,
+    \begin{align}
+        f(\bar{\mathbf{x}}) \geq
+        P_{\sigma_k}(\mathbf{x}(\sigma_k))
+        \geq f(\mathbf{x}(\sigma_k))
+    \end{align}
+\end{lemma}
+\begin{proof}
+    For all $\sigma_k>0$,
+    \begin{align}
+        f(\bar{\mathbf{x}}) &= 
+        \min_{\mathbf{x} \in \mathbb{R}^n}
+        \lim_{\sigma \rightarrow \infty}
+        f(\mathbf{x}) + \sigma \parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel^2 \\
+        &\geq \min_{\mathbf{x} \in \mathbb{R}^n}
+        f(\mathbf{x}) + \sigma_k \parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel^2\\
+        &= f(\mathbf{x}(\sigma_k)) + \sigma_k \parallel \mathbf{c}
+        (\mathbf{x}(\sigma_{k}))\_ \parallel^2 \\
+        &\geq f(\mathbf{x}(\sigma_k))
+    \end{align}
+    \qed
+\end{proof}
+\begin{lemma}
+    Let $\delta = \parallel \mathbf{c}
+    (\mathbf{x}(\sigma))\_ \parallel$,
+    then $\mathbf{x}(\sigma)$ is also
+    the solution to the problem
+    \begin{align}
+        \min \ &f(\mathbf{x}) \\
+        s.t. \ &\parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel \leq \delta
+    \end{align}
+\end{lemma}
+\begin{proof}
+    The problem is equivalent to
+    \begin{align}
+        \min \ &f(\mathbf{x}) \\
+        s.t. \ &\parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel \leq
+        \parallel \mathbf{c}
+        (\mathbf{x}(\sigma))\_ \parallel
+    \end{align}
+    \begin{align}
+        f(\mathbf{x}(\sigma)) + \sigma \parallel \mathbf{c}
+        (\mathbf{x}(\sigma))\_ \parallel^2 = 
+        \min_{\mathbf{x} \in \mathbb{R}^n}
+        f(\mathbf{x}) + \sigma \parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel^2
+    \end{align}
+    Then for all $\mathbf{x} \in \mathbb{R}^n$, we have
+    \begin{align}
+        f(\mathbf{x}(\sigma)) + \sigma \parallel \mathbf{c}
+        (\mathbf{x}(\sigma))\_ \parallel^2 &\leq 
+        f(\mathbf{x}) + \sigma \parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel^2 \\
+        f(\mathbf{x}(\sigma)) - f(\mathbf{x}) &\leq
+        \sigma(\parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel^2 - \parallel \mathbf{c}
+        (\mathbf{x}(\sigma))\_ \parallel^2)
+    \end{align}
+    That is, if $\parallel \mathbf{c}
+    (\mathbf{x})\_ \parallel \leq \parallel \mathbf{c}
+    (\mathbf{x}(\sigma))\_ \parallel$, then
+    \begin{align}
+        f(\mathbf{x}(\sigma)) - f(\mathbf{x}) \leq
+        \sigma(\parallel \mathbf{c}
+        (\mathbf{x})\_ \parallel^2 - \parallel \mathbf{c}
+        (\mathbf{x}(\sigma))\_ \parallel^2) \leq 0
+    \end{align}
+    i.e., for all $\mathbf{x} \in \mathbb{R}^n$,
+    $f(\mathbf{x}(\sigma)) \leq f(\mathbf{x})$.
+    \qed
+\end{proof}
+
+
+
+
+
+\clearpage
+\section{Convex Optimization}
+\subsection{Convex set}
+\subsection{Convex function}
+\subsection{Convex optimization}
+\noindent\textbf{Quadratically constrained quadratic program}
+\begin{align}
+    \min \ &\frac{1}{2} \mathbf{x}^T P_0 \mathbf{x}
+    + \mathbf{q}_0^T \mathbf{x} + r_0 \\
+    s.t. \ &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+    + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 1,...,m \\
+    & A \mathbf{x} = \mathbf{b}
+\end{align}
+
+\par
+\noindent\textbf{Second-order cone program}
+\begin{align}
+    \min \ & \mathbf{f}^T \mathbf{x} \\
+    s.t. \ & \parallel A_i \mathbf{x} + \mathbf{b}_i \parallel
+    \leq \mathbf{c}_i^T\mathbf{x} + \mathbf{d}_i, \quad i = 1,...,m \\
+    & F\mathbf{x} = \mathbf{g}
+\end{align}
+
+\begin{lemma}
+    Any QCQP problem can be formulated as a SOCP problem.
+\end{lemma}
+\begin{proof}
+    The QCQP problem is equivalent to
+    \begin{align}
+        \min \ & - r_0 \\
+        s.t. \ &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+        + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 0,...,m \\
+        & A \mathbf{x} = \mathbf{b}
+    \end{align}
+    Then we need to prove that (121) can be formulated as (118).
+    \begin{align}
+        &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+        + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0 \\
+        \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+        + 2(\mathbf{q}_i^T \mathbf{x} + r_i) \leq 0 \\
+        \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+        + 2(\mathbf{q}_i^T \mathbf{x} + r_i)
+        + (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2
+         \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
+         \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+         + (\mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2})^2
+          \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2
+    \end{align}
+    Since $P_i$ is positive semi-definite, $P_i = A_i^TA_i$, then
+    \begin{align}
+        \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+        + (\mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2})^2
+         \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
+         \Leftrightarrow \ & \parallel A_i \mathbf{x} \parallel^2
+         + \parallel \mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2}\parallel^2
+          \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 
+    \end{align}
+    Let
+    \begin{align}
+        A_i' &= \left(
+            \begin{array}{ll}
+                A \\
+                \mathbf{q}^T
+            \end{array}\right) \\
+            \mathbf{b}_i &= \left(
+                \begin{array}{ll}
+                    \mathbf{0}_{n\times1} \\
+                    r_i + \frac{1}{2}
+                \end{array}\right)
+    \end{align}
+    From (123) and $\mathbf{x}^T P_i \mathbf{x} \geq 0$,
+    we can derive that $\mathbf{q}_i^T \mathbf{x} + r_i \leq 0$,
+    i.e., $\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2} \leq 0$.
+    \par
+    Then (128) can be formulated as
+    \begin{align}
+        &\parallel A_i'\mathbf{x} + \mathbf{b}_i \parallel^2
+        \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
+        \Leftrightarrow \ & \parallel A_i'\mathbf{x} + \mathbf{b}_i \parallel
+        \leq -(\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})
+    \end{align}
+\end{proof}
+
+
 \end{document}

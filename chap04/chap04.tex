@@ -1,0 +1,97 @@
+\chapter{Convex Optimization}
+\vspace{1em}
+\section{Convex set}
+\begin{definition}[Convex Set]
+    A set $\mathcal{C} \subset \mathbb{R}^n$ affine
+    if $\mathbf{x}_1, \mathbf{x}_2 \in \mathcal{C}$
+    and $\theta \in \mathbb{R}$, we have
+    \begin{align}
+        \theta \mathbf{x}_1 + 
+        (1 - \theta)\mathbf{x}_2
+        \in \mathcal{C}
+    \end{align}
+\end{definition}
+\section{Convex function}
+\section{Convex optimization}
+\subsection{Quadratically constrained quadratic program}
+\begin{align}
+    \begin{array}{lll}
+        \min \ &\frac{1}{2} \mathbf{x}^T P_0 \mathbf{x}
+        + \mathbf{q}_0^T \mathbf{x} + r_0 \\
+        s.t. \ &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+        + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 1,...,m \\
+        & A \mathbf{x} = \mathbf{b}
+    \end{array}
+\end{align}
+
+
+\par
+\subsection{Second-order cone program}
+\begin{align}
+    \begin{array}{lll}
+        \min \ & \mathbf{f}^T \mathbf{x} \\
+        s.t. \ & \parallel A_i \mathbf{x} + \mathbf{b}_i \parallel
+        \leq \mathbf{c}_i^T\mathbf{x} + \mathbf{d}_i, \quad i = 1,...,m \\
+        & F\mathbf{x} = \mathbf{g}
+    \end{array}
+\end{align}
+
+\begin{lemma}
+    Any QCQP problem can be formulated as a SOCP problem.
+\end{lemma}
+\begin{proof}
+    The QCQP problem is equivalent to
+    \begin{align}
+        \min \ & - r_0 \\
+        s.t. \ &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+        + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 0,...,m \\
+        & A \mathbf{x} = \mathbf{b}
+    \end{align}
+    Then we need to prove that (121) can be formulated as (118).
+    \begin{align}
+        &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+        + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0 \\
+        \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+        + 2(\mathbf{q}_i^T \mathbf{x} + r_i) \leq 0 \\
+        \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+        + 2(\mathbf{q}_i^T \mathbf{x} + r_i)
+        + (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2
+         \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
+         \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+         + (\mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2})^2
+          \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2
+    \end{align}
+    Since $P_i$ is positive semi-definite, $P_i = A_i^TA_i$, then
+    \begin{align}
+        \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
+        + (\mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2})^2
+         \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
+         \Leftrightarrow \ & \parallel A_i \mathbf{x} \parallel^2
+         + \parallel \mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2}\parallel^2
+          \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 
+    \end{align}
+    Let
+    \begin{align}
+        A_i' &= \left(
+            \begin{array}{ll}
+                A \\
+                \mathbf{q}^T
+            \end{array}\right) \\
+            \mathbf{b}_i &= \left(
+                \begin{array}{ll}
+                    \mathbf{0}_{n\times1} \\
+                    r_i + \frac{1}{2}
+                \end{array}\right)
+    \end{align}
+    From (123) and $\mathbf{x}^T P_i \mathbf{x} \geq 0$,
+    we can derive that $\mathbf{q}_i^T \mathbf{x} + r_i \leq 0$,
+    i.e., $\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2} \leq 0$.
+    \par
+    Then (128) can be formulated as
+    \begin{align}
+        &\parallel A_i'\mathbf{x} + \mathbf{b}_i \parallel^2
+        \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
+        \Leftrightarrow \ & \parallel A_i'\mathbf{x} + \mathbf{b}_i \parallel
+        \leq -(\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})
+    \end{align}
+\end{proof}
