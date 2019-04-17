@@ -287,7 +287,46 @@ $f(x)$ is second-order differentiable at $x$,
         \bigtriangledown g_i(x) - \sum_{j=1}^m \mu_j
         \bigtriangledown h_j(x) = 0
     \end{align}
+    \label{equ:k-t1}
 \end{theorem}
+
+\begin{remark}[K-T condition]
+    The equation (\ref{equ:k-t1}) can be rewritten as
+    \begin{align}
+        \bigtriangledown f(x) - \sum_{i=1}^m \lambda_i
+        \bigtriangledown g_i(x) - \sum_{j=1}^m \mu_j
+        \bigtriangledown h_j(x) = 0
+    \end{align}
+    where $\lambda_i = 0, i \notin I(x)$. i.e.,
+    \begin{align}
+        \lambda_i g_i(x) = 0, i = 1,...,m
+    \end{align}
+    Denote
+    \begin{align}
+        \mathcal{L}(\mathbf{x}, \lambda, \mu) = 
+        f(x) - \sum_{i=1}^m \lambda_i
+        g_i(x) - \sum_{j=1}^m \mu_j
+        h_j(x)
+    \end{align}
+    as the \emph{Lagrange function},
+    then the K-T condition can be formulated as
+    \begin{align}
+        (K-T) \left\{
+            \begin{array}{lllll}
+                \bigtriangledown_\mathbf{x} \mathcal{L}
+                (\mathbf{x}, \lambda, \mu) = 0 \\
+                \bigtriangledown_\mathbf{\lambda} \mathcal{L}
+                (\mathbf{x}, \lambda, \mu) = 0 \\
+                \bigtriangledown_\mathbf{\mu} \mathcal{L}
+                (\mathbf{x}, \lambda, \mu) = 0 \\
+                \lambda_i \geq 0, i = 1,...,m \\
+                \lambda_i g_i(\mathbf{x}) = 0, i = 1,..,m
+            \end{array}
+        \right.
+    \end{align}
+    \label{sys:k-t}
+\end{remark}
+
 \section{Descent function}
 \par
 \begin{definition}{Descent function.}

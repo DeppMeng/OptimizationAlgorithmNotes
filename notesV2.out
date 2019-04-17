@@ -35,11 +35,16 @@
 \BOOKMARK [2][-]{subsection.3.3.4}{Barrier method}{section.3.3}% 35
 \BOOKMARK [0][-]{chapter.4}{Convex Optimization}{}% 36
 \BOOKMARK [1][-]{section.4.1}{Convex set}{chapter.4}% 37
-\BOOKMARK [1][-]{section.4.2}{Convex function}{chapter.4}% 38
-\BOOKMARK [1][-]{section.4.3}{Convex optimization}{chapter.4}% 39
-\BOOKMARK [2][-]{subsection.4.3.1}{Quadratically constrained quadratic program}{section.4.3}% 40
-\BOOKMARK [2][-]{subsection.4.3.2}{Second-order cone program}{section.4.3}% 41
-\BOOKMARK [0][-]{chapter.5}{Sparse Optimization}{}% 42
-\BOOKMARK [1][-]{section.5.1}{Compressed Sensing}{chapter.5}% 43
-\BOOKMARK [2][-]{subsection.5.1.1}{Problem formulation}{section.5.1}% 44
-\BOOKMARK [2][-]{subsection.5.1.2}{Pursuit Algorithms}{section.5.1}% 45
+\BOOKMARK [2][-]{subsection.4.1.1}{Affine set}{section.4.1}% 38
+\BOOKMARK [2][-]{subsection.4.1.2}{Convex set}{section.4.1}% 39
+\BOOKMARK [2][-]{subsection.4.1.3}{Cone}{section.4.1}% 40
+\BOOKMARK [2][-]{subsection.4.1.4}{Proper cones and generalized inequalities}{section.4.1}% 41
+\BOOKMARK [1][-]{section.4.2}{Convex function}{chapter.4}% 42
+\BOOKMARK [2][-]{subsection.4.2.1}{First order condition}{section.4.2}% 43
+\BOOKMARK [1][-]{section.4.3}{Convex optimization}{chapter.4}% 44
+\BOOKMARK [2][-]{subsection.4.3.1}{Quadratically constrained quadratic program}{section.4.3}% 45
+\BOOKMARK [2][-]{subsection.4.3.2}{Second-order cone program}{section.4.3}% 46
+\BOOKMARK [0][-]{chapter.5}{Sparse Optimization}{}% 47
+\BOOKMARK [1][-]{section.5.1}{Compressed Sensing}{chapter.5}% 48
+\BOOKMARK [2][-]{subsection.5.1.1}{Problem formulation}{section.5.1}% 49
+\BOOKMARK [2][-]{subsection.5.1.2}{Pursuit Algorithms}{section.5.1}% 50

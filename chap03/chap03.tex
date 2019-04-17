@@ -452,11 +452,100 @@ that is, $\mathbf{x}(\sigma)$ is the solution to (\ref{pro:sqp-original}).
     
 \end{proof}
 \subsection{Extended Lagrange function method}
+\subsubsection{Revisit Penalty method}
 Consider equality constrained problem
 \begin{align}
     \begin{array}{ll}
         \min \ &f(\mathbf{x}) \\
         s.t. \ &\mathbf{c}(\mathbf{x}) = 0
     \end{array}
+    \label{pro:penalty1}
 \end{align}
+The Lagrange function of (\ref{pro:penalty1}) is
+\begin{align}
+    \mathcal{L}(\mathbf{x}, \lambda) = 
+    f(\mathbf{x}) - \lambda^T \mathbf{c}(\mathbf{x})
+\end{align}
+From K-T condition, we have for global optimal point
+$\mathbf{x}^*$,
+\begin{align}
+    \left\{
+        \begin{array}{ll}
+            \bigtriangledown{\mathbf{x}} \mathcal{L}
+            (\mathbf{x}, \lambda) = 0 \\
+            \bigtriangledown{\lambda} \mathcal{L}
+            (\mathbf{x}, \lambda) = 0
+        \end{array}
+        \right.
+\end{align}
+i.e., $\mathbf{x}^*$ is a stable point of
+$\mathcal{L}(\mathbf{x}, \lambda)$.
+Notice that
+\begin{align}
+    \bigtriangledown{\mathbf{x}} \mathcal{L}
+    (\mathbf{x}, \lambda) = 
+    \bigtriangledown f(\mathbf{x}) - 
+    \sum_i \lambda_i \bigtriangledown c_i(\mathbf{x})
+    \label{equ:penalty1}
+\end{align}
+For the corresponding penalty function
+\begin{align}
+    P_\sigma (\mathbf{x}) =
+    f(\mathbf{x}) + \sigma \parallel
+    \mathbf{c}(\mathbf{x}) \parallel^2
+\end{align}
+we have the K-T condition is
+\begin{align}
+    \bigtriangledown P_\sigma (\mathbf{x}) &= 
+    \bigtriangledown f(\mathbf{x}) + 
+    2\sigma \mathbf{c}^T(\mathbf{x}) 
+    \bigtriangledown \mathbf{c}(\mathbf{x}) \\
+    &= 
+    \bigtriangledown f(\mathbf{x}) + 
+    \sum_i 2\sigma c_i(\mathbf{x}) 
+    \bigtriangledown c_i(\mathbf{x})
+    \label{equ:penalty2}
+\end{align}
+
+If we want (\ref{equ:penalty2}) to be a good
+approximation of (\ref{equ:penalty1}), i.e.,
+\begin{align}
+    \lambda_i \approx - 2 \sigma c_i(\mathbf{x})
+\end{align}
+
+Notice that $c_i(\mathbf{x}) \approx 0$, so we need
+$|\sigma| \rightarrow \infty $.
+
+\subsubsection{Argumented Lagrange function method}
+Consider \emph{Argumented Lagrange function}
+\begin{align}
+    P(\mathbf{x}, \lambda, \sigma) = 
+    \mathcal{L}(\mathbf{x}, \lambda) + 
+    \frac{\sigma}{2} \parallel \mathbf{c}
+    (\mathbf{x}) \parallel^2
+\end{align}
+The K-T condition of the function is
+\begin{align}
+    \bigtriangledown P(\mathbf{x}, \lambda, \sigma) &= 
+    \bigtriangledown f(\mathbf{x}) - 
+    \sum_i (\lambda_i - \sigma c_i(\mathbf{x})) \bigtriangledown
+    c_i(\mathbf{x}) \\ &=
+    \bigtriangledown f(\mathbf{x}) - 
+    \sum_i \lambda_i \bigtriangledown
+    c_i(\mathbf{x})
+\end{align}
+i.e., the K-T condition of $P$ is similar to the original
+problem (\ref{pro:penalty1}).
+\begin{theorem}
+    Suppose $\mathbf{x}^*$ and $\lambda^*$ satisfy
+    the K-T condition of (\ref{pro:penalty1}),
+    then there exists $\bar{\sigma}$ such that
+    when $\sigma > \bar{\sigma}$,
+    $\mathbf{x}^*$ is the strict local minima
+    of $P(\mathbf{x}, \lambda^*, \sigma)$.
+\end{theorem}
+
+However, the optimal value of $\lambda$ remains
+unknown.
+
 \subsection{Barrier method}

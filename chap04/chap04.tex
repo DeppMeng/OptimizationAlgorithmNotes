@@ -1,8 +1,9 @@
 \chapter{Convex Optimization}
 \vspace{1em}
 \section{Convex set}
-\begin{definition}[Convex Set]
-    A set $\mathcal{C} \subset \mathbb{R}^n$ affine
+\subsection{Affine set}
+\begin{definition}[Affine set]
+    A set $\mathcal{C} \subset \mathbb{R}^n$ is affine
     if $\mathbf{x}_1, \mathbf{x}_2 \in \mathcal{C}$
     and $\theta \in \mathbb{R}$, we have
     \begin{align}
@@ -11,7 +12,124 @@
         \in \mathcal{C}
     \end{align}
 \end{definition}
+
+\begin{definition}[Affine hull]
+    The set of all affine combinations of points
+    in some set $\mathcal{C} \subset \mathbb{R}^n$
+    is called the \emph{affine hull} of $\mathcal{C}$,
+    denoted $\mathbf{aff}\mathcal{C}$:
+    \begin{align}
+        \mathbf{aff}\mathcal{C} = \{
+            \sum_{i=1}^k \theta_i \mathbf{x}_i \ | \ 
+            \mathbf{x}_1,...,\mathbf{x}_k \in \mathcal{C},
+            \theta_1 + ... + \theta_k = 1\}
+    \end{align}
+\end{definition}
+\begin{remark}
+    The affine hull is the smallest affine set
+    that contains $\mathcal{C}$.
+\end{remark}
+\begin{proof}
+    For any affine set $\mathcal{A}$ contains $\mathcal{C}$,
+    we have
+    \begin{align}
+        \sum_{i=1}^k \theta_i \mathbf{x}_i \in \mathcal{A},
+        \forall \mathbf{x}_1,...,\mathbf{x}_k \in \mathcal{C},
+            \theta_1 + ... + \theta_k = 1
+    \end{align}
+    i.e., $\mathbf{aff}\mathcal{C} \subset \mathcal{A}$.
+\end{proof}
+
+\subsection{Convex set}
+\begin{definition}[Convex set]
+    A set $\mathcal{C} \subset \mathbb{R}^n$ is convex
+    if $\mathbf{x}_1, \mathbf{x}_2 \in \mathcal{C}$
+    and $0 \leq \theta \leq 1$, we have
+    \begin{align}
+        \theta \mathbf{x}_1 + 
+        (1 - \theta)\mathbf{x}_2
+        \in \mathcal{C}
+    \end{align}
+\end{definition}
+\begin{definition}[Convex hull]
+    The set of all convex combinations of points
+    in some set $\mathcal{C} \subset \mathbb{R}^n$
+    is called the \emph{convex hull} of $\mathcal{C}$,
+    denoted $\mathbf{conv}\mathcal{C}$:
+    \begin{align}
+        \mathbf{conv}\mathcal{C} = \{
+            \sum_{i=1}^k \theta_i \mathbf{x}_i \ | \ 
+            \mathbf{x}_1,...,\mathbf{x}_k \in \mathcal{C},
+            \theta_i \geq 0,
+            \theta_1 + ... + \theta_k = 1\}
+    \end{align}
+\end{definition}
+\begin{remark}
+    The convex hull is the smallest convex set
+    that contains $\mathcal{C}$.
+\end{remark}
+
+\subsection{Cone}
+\begin{definition}[Cone]
+    A set $\mathcal{C}$ is called a \emph{cone},
+    if $\forall \mathbf{x} \in \mathcal{C}$ and
+    $\theta \geq 0$ we have $\theta \mathbf{x} \in \mathcal{C}$.
+    A set $\mathcal{C}$ is called a \emph{convex cone}
+    if it is convex and a cone, i.e.,
+    $\forall \mathbf{x}_1, \mathbf{x})_2 \in \mathcal{C}$
+    and $\theta_1, \theta_2 \geq 0$, we have
+    \begin{align}
+        \theta_1 \mathbf{x}_1 + \theta_2 \mathbf{x}_2
+        \in \mathcal{C}
+    \end{align}
+\end{definition}
+
+\begin{definition}[Conic hull]
+    The conic hull of set $\mathcal{C}$ is the
+    set of all conic combinations of points in
+    $\mathcal{C}$, i.e.,
+    \begin{align}
+        \{ \sum_{i=1}^k \theta_i \mathbf{x}_i \ | \
+        \mathbf{x}_i \in \mathcal{C}, \theta_i \geq 0,
+        i = 1,...,k \}
+    \end{align}
+\end{definition}
+
+\subsection{Proper cones and generalized inequalities}
+
+
+
 \section{Convex function}
+\begin{definition}[Convex function]
+    A function $f:\mathbb{R}^n \rightarrow \mathbb{R}$
+    is \emph{convex} if $\mathbf{dom}f$ is a convex
+    set and if $\forall x, y \in \mathbf{dom}f$ and
+    $\theta$ with $0 \leq \theta\leq 1$, we have
+    \begin{align}
+        f(\theta x_1 + (1 - \theta) x_2) \leq
+        \theta f(x_1) + (1 - \theta) f(x_2)
+    \end{align}
+\end{definition}
+
+\subsection{First order condition}
+Suppose $f$ is differentiable
+\begin{theorem}
+    Function $f$ is convex if and only if $\mathbf{dom}f$
+    is a convex set and for $\forall x, y \in \mathbf{dom}f$,
+    the following holds:
+    \begin{align}
+        f(y) \geq f(x) + \bigtriangledown f(x)^T (y - x)
+    \end{align}
+\end{theorem}
+
+\begin{remark}
+    If $\bigtriangledown f(x^*) = 0$, then for
+    $\forall y \in \mathbf{dom}f$, 
+    $f(y) \geq f(x^*)$, i.e., $x^*$
+    is the global minimizer of $f$.
+\end{remark}
+
+
 \section{Convex optimization}
 \subsection{Quadratically constrained quadratic program}
 \begin{align}
