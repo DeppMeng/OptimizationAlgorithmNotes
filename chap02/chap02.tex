@@ -80,7 +80,7 @@ where $\sigma \in (\rho, 1)$.
 
 \subsection{Global Convergence}
 \begin{theorem}
-    Assume $\bigtriangledown f(x)$ exists and uniformly continuous
+    Assume $f$ continuously differentiable
     on level set $L(x^{(0)}) = \{ x | f(x) \leq f(x^{(0)})\}$.
     Denote $\theta^{(k)}$ as the angle between $d^{(k)}$
     and $-\bigtriangledown f(x^{(k)})$.
@@ -97,7 +97,13 @@ where $\sigma \in (\rho, 1)$.
     or $f(x^{(k)}) \rightarrow 0$ or $f(x^{(k)}) \rightarrow - \infty$.
 \end{theorem}
 \begin{proof}
-    
+    (In the Wolfe-Powell Conditions case)
+    \par
+    Suppose for all $k, \mathbf{g}^{(k)} = 
+    \bigtriangledown f(\mathbf{x}^{(k)}) \neq 0$
+    and $f(\mathbf{x}^{(k)})$ has finite lower bound.
+    So $f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k+1)})
+    \rightarrow 0$.
 \end{proof}
 
 \subsection{Steepest Descent Method}

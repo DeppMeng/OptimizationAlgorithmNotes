@@ -120,6 +120,7 @@ Suppose $f$ is differentiable
     \begin{align}
         f(y) \geq f(x) + \bigtriangledown f(x)^T (y - x)
     \end{align}
+    \label{th:conv2}
 \end{theorem}
 
 \begin{remark}
@@ -129,9 +130,164 @@ Suppose $f$ is differentiable
     is the global minimizer of $f$.
 \end{remark}
 
+\subsection{Second order condition}
+Suppose $f$ is twice differentiable
+\begin{theorem}
+    Function $f$ is convex if and only if $\mathbf{dom}f$
+    is a convex set and for $\forall x \mathbf{dom}f$,
+    the following holds:
+    \begin{align}
+        \bigtriangledown^2 f(x) \succeq 0 
+    \end{align}
+\end{theorem}
+\begin{remark}
+    If $\bigtriangledown^2 f(x) \succ 0$ for
+    $\forall x \mathbf{dom}f$, then $f$ is
+    \emph{strictly convex}.
+\end{remark}
+
+\subsection{Properties of Convex functions}
+\subsubsection{Jensen's Inequality}
+\begin{theorem}[Jensen's Inequality]
+    If $f$ is convex, $x_1,..., x_k \in \mathbf{dom}f$,
+    and $\theta_1,...,\theta_k \geq 0$ with
+    $\theta_1 + ... + \theta_k = 1$, then
+    \begin{align}
+        f(\theta_1 x_1 + ... + \theta_k x_k)
+        \leq \theta_1 f(x_1) + ... + \theta_k f(x_k)
+    \end{align}
+\end{theorem}
+
+\subsubsection{Operations that preserve convexity}
+\paragraph{Nonnegative weighted sums}
+If $f_1,..., f_m$ are covex and $w_1,...,w_m \geq 0$,
+then
+\begin{align}
+    f = w_1 f_1 + ... + w_m f_m
+\end{align}
+is convex.
+\par
+If $f(x, y)$ is convex w.r.t $x$ for each
+$y \in \mathcal{A}$, and $w(y) \geq 0$ for each
+$y \in \mathcal{A}$, then the function
+\begin{align}
+    g(x) = \int_{\mathcal{A}} w(y) f(x, y) dy
+\end{align}
+is convex w.r.t $x$.
 
 \section{Convex optimization}
-\subsection{Quadratically constrained quadratic program}
+A \emph{convex optimization problem}
+is one of the form
+\begin{align}
+    \begin{array}{lll}
+        \min \ &f_0 (\mathbf{x}) \\
+        s.t. \ &f_i (\mathbf{x}) \leq 0, &i = 1,..., m \\
+        &a_j^T \mathbf{x} = b_j, &j = 1, ..., p
+    \end{array}
+    \label{pro:conv1}
+\end{align} 
+where $f_0,..., f_m$ are convex functions.
+\begin{remark}
+    The equality constraint is linear if the problem
+    is convex.
+\end{remark}
+\begin{proof}
+    For equality constraint
+    \begin{align}
+        \mathbf{c}(\mathbf{x}) = 0
+    \end{align}
+    we can rewrite it into
+    \begin{align}
+        \mathbf{c}(\mathbf{x}) \leq 0 \\
+        -\mathbf{c}(\mathbf{x}) \leq 0
+    \end{align}
+    Due to the convexity of the problem,
+    both $\mathbf{c}(\mathbf{x})$ and
+    $-\mathbf{c}(\mathbf{x})$ are convex.
+    i.e., $\mathbf{c}(\mathbf{x})$ is linear.
+\end{proof}
+
+\subsection{Optimal condition}
+
+\begin{theorem}[Optimal condition]
+Suppose (\ref{pro:conv1}) is differentiable.
+Let $S$ denote the feasible set, then $\mathbf{x}^*$
+is optimal if and only if $\mathbf{x}^* \in S$ and
+\begin{align}
+    \bigtriangledown f_0(\mathbf{x})^T (\mathbf{y}
+    - \mathbf{x}) \geq 0, \forall y \in S
+    \label{equ:conv1}
+\end{align}
+\label{th:conv1}
+\end{theorem}
+\begin{proof}
+    If $\mathbf{x}^*$ is optimal, then
+    we can easily derive (\ref{equ:conv1}).
+    \par
+    If (\ref{equ:conv1}) stands, then from
+    Theorem \ref{th:conv2},
+    \begin{align}
+        f(\mathbf{y}) - f(\mathbf{x})
+        \geq \bigtriangledown f_0(\mathbf{x})^T (\mathbf{y}
+        - \mathbf{x}) \geq 0, \forall y \in S
+    \end{align}
+\end{proof}
+
+\begin{lemma}
+For convex problem with equality constraints only,
+i.e.,
+\begin{align}
+    \begin{array}{ll}
+        \min \ &f_0 (\mathbf{x}) \\
+        s.t. \ &A (\mathbf{x}) = \mathbf{b} 
+    \end{array}
+\end{align}
+the optimal condition can be expressed as
+\begin{align}
+    \bigtriangledown f_0(\mathbf{x})^T \mathbf{u}
+    \geq 0, \forall \mathbf{u} \in \mathcal{N}(A)
+\end{align}
+in other words,
+\begin{align}
+    \bigtriangledown f_0(\mathbf{x}) \perp
+    \mathcal{N}(A)
+\end{align}
+\end{lemma}
+
+\begin{proof}
+    From Theorem \ref{th:conv1}, we have
+    $\mathbf{x}^*$ is optimal if and only if
+    $A\mathbf{x} = \mathbf{b}$, for $\forall \mathbf{y}$
+    such that $A\mathbf{y} = \mathbf{b}$,
+    \begin{align}
+        \bigtriangledown f_0(\mathbf{x})^T (\mathbf{y}
+    - \mathbf{x}) \geq 0
+    \end{align}
+    i.e., $A(\mathbf{y} - \mathbf{x}) = 0$.
+    Let $\mathbf{u} = \mathbf{y} - \mathbf{x}$,
+    then
+    \begin{align}
+        \bigtriangledown f_0(\mathbf{x})^T \mathbf{u}
+        \geq 0, \forall \mathbf{u} \in \mathcal{N}(A)
+    \end{align}
+    further, if $\mathbf{u} \in \mathcal{N}(A)$,
+    then, $-\mathbf{u} \in \mathcal{N}(A)$, so we have
+    \begin{align}
+        \bigtriangledown f_0(\mathbf{x})^T \mathbf{u}
+        = 0, \forall \mathbf{u} \in \mathcal{N}(A)
+    \end{align}
+    i.e.,
+    \begin{align}
+        \bigtriangledown f_0(\mathbf{x}) \perp
+        \mathcal{N}(A)
+    \end{align}
+\end{proof}
+
+\subsection{Linear optimization}
+
+\subsection{Quadratic optimization}
+
+\subsubsection{Quadratically constrained quadratic program}
 \begin{align}
     \begin{array}{lll}
         \min \ &\frac{1}{2} \mathbf{x}^T P_0 \mathbf{x}
@@ -144,7 +300,7 @@ Suppose $f$ is differentiable
 
 
 \par
-\subsection{Second-order cone program}
+\subsubsection{Second-order cone program}
 \begin{align}
     \begin{array}{lll}
         \min \ & \mathbf{f}^T \mathbf{x} \\
@@ -213,3 +369,5 @@ Suppose $f$ is differentiable
         \leq -(\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})
     \end{align}
 \end{proof}
+
+\section{The Lagrangian}

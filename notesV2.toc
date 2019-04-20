@@ -41,24 +41,33 @@
 \contentsline {section}{\numberline {3.3}General Nonlinear Constrained Problem}{19}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Sequential Quadratic Programming method}{19}{subsection.3.3.1}
 \contentsline {subsection}{\numberline {3.3.2}Penalty method}{20}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Extended Lagrange function method}{22}{subsection.3.3.3}
+\contentsline {subsection}{\numberline {3.3.3}Argumented Lagrange function method}{22}{subsection.3.3.3}
 \contentsline {subsubsection}{\numberline {3.3.3.1}Revisit Penalty method}{22}{subsubsection.3.3.3.1}
 \contentsline {subsubsection}{\numberline {3.3.3.2}Argumented Lagrange function method}{23}{subsubsection.3.3.3.2}
-\contentsline {subsection}{\numberline {3.3.4}Barrier method}{23}{subsection.3.3.4}
-\contentsline {chapter}{\numberline {4}Convex Optimization}{25}{chapter.4}
-\contentsline {section}{\numberline {4.1}Convex set}{25}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Affine set}{25}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}Convex set}{25}{subsection.4.1.2}
-\contentsline {subsection}{\numberline {4.1.3}Cone}{25}{subsection.4.1.3}
-\contentsline {subsection}{\numberline {4.1.4}Proper cones and generalized inequalities}{26}{subsection.4.1.4}
-\contentsline {section}{\numberline {4.2}Convex function}{26}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}First order condition}{26}{subsection.4.2.1}
-\contentsline {section}{\numberline {4.3}Convex optimization}{26}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Quadratically constrained quadratic program}{26}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Second-order cone program}{26}{subsection.4.3.2}
-\contentsline {chapter}{\numberline {5}Sparse Optimization}{29}{chapter.5}
-\contentsline {section}{\numberline {5.1}Compressed Sensing}{29}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}Problem formulation}{29}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Pursuit Algorithms}{29}{subsection.5.1.2}
-\contentsline {subsubsection}{\numberline {5.1.2.1}Orthogonal Matching Pursuit}{29}{subsubsection.5.1.2.1}
-\contentsline {subsubsection}{\numberline {5.1.2.2}Basis Pursuit}{29}{subsubsection.5.1.2.2}
+\contentsline {subsection}{\numberline {3.3.4}Barrier method}{24}{subsection.3.3.4}
+\contentsline {chapter}{\numberline {4}Convex Optimization}{27}{chapter.4}
+\contentsline {section}{\numberline {4.1}Convex set}{27}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Affine set}{27}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}Convex set}{27}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.3}Cone}{27}{subsection.4.1.3}
+\contentsline {subsection}{\numberline {4.1.4}Proper cones and generalized inequalities}{28}{subsection.4.1.4}
+\contentsline {section}{\numberline {4.2}Convex function}{28}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}First order condition}{28}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Second order condition}{28}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Properties of Convex functions}{29}{subsection.4.2.3}
+\contentsline {subsubsection}{\numberline {4.2.3.1}Jensen's Inequality}{29}{subsubsection.4.2.3.1}
+\contentsline {subsubsection}{\numberline {4.2.3.2}Operations that preserve convexity}{29}{subsubsection.4.2.3.2}
+\contentsline {paragraph}{Nonnegative weighted sums}{29}{section*.4}
+\contentsline {section}{\numberline {4.3}Convex optimization}{29}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Optimal condition}{30}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Linear optimization}{31}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Quadratic optimization}{31}{subsection.4.3.3}
+\contentsline {subsubsection}{\numberline {4.3.3.1}Quadratically constrained quadratic program}{31}{subsubsection.4.3.3.1}
+\contentsline {subsubsection}{\numberline {4.3.3.2}Second-order cone program}{31}{subsubsection.4.3.3.2}
+\contentsline {section}{\numberline {4.4}The Lagrangian}{32}{section.4.4}
+\contentsline {chapter}{\numberline {5}Sparse Optimization}{33}{chapter.5}
+\contentsline {section}{\numberline {5.1}Compressed Sensing}{33}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Problem formulation}{33}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Pursuit Algorithms}{33}{subsection.5.1.2}
+\contentsline {subsubsection}{\numberline {5.1.2.1}Orthogonal Matching Pursuit}{33}{subsubsection.5.1.2.1}
+\contentsline {subsubsection}{\numberline {5.1.2.2}Basis Pursuit}{33}{subsubsection.5.1.2.2}

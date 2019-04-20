@@ -306,6 +306,7 @@ that is, $\mathbf{x}(\sigma)$ is the solution to (\ref{pro:sqp-original}).
     $\parallel \mathbf{c}(\mathbf{x}(\sigma_k))\_ \parallel
     \geq \parallel \mathbf{c}(\mathbf{x}(\sigma_{k+1}))\_ \parallel$,
     $f(\mathbf{x}(\sigma_k)) \leq f(\mathbf{x}(\sigma_{k+1}))$.
+    \label{lemma:penalty1}
 \end{lemma}
 \begin{proof}
     \begin{align}
@@ -451,7 +452,7 @@ that is, $\mathbf{x}(\sigma)$ is the solution to (\ref{pro:sqp-original}).
     $f(\mathbf{x}(\sigma)) \leq f(\mathbf{x})$.
     
 \end{proof}
-\subsection{Extended Lagrange function method}
+\subsection{Argumented Lagrange function method}
 \subsubsection{Revisit Penalty method}
 Consider equality constrained problem
 \begin{align}
@@ -471,10 +472,10 @@ $\mathbf{x}^*$,
 \begin{align}
     \left\{
         \begin{array}{ll}
-            \bigtriangledown{\mathbf{x}} \mathcal{L}
-            (\mathbf{x}, \lambda) = 0 \\
-            \bigtriangledown{\lambda} \mathcal{L}
-            (\mathbf{x}, \lambda) = 0
+            \bigtriangledown_{\mathbf{x}} \mathcal{L}
+            (\mathbf{x}^*, \lambda^*) = 0 \\
+            \bigtriangledown_{\lambda} \mathcal{L}
+            (\mathbf{x}^*, \lambda^*) = 0
         \end{array}
         \right.
 \end{align}
@@ -483,9 +484,9 @@ $\mathcal{L}(\mathbf{x}, \lambda)$.
 Notice that
 \begin{align}
     \bigtriangledown{\mathbf{x}} \mathcal{L}
-    (\mathbf{x}, \lambda) = 
-    \bigtriangledown f(\mathbf{x}) - 
-    \sum_i \lambda_i \bigtriangledown c_i(\mathbf{x})
+    (\mathbf{x}^*, \lambda^*) = 
+    \bigtriangledown f(\mathbf{x}^*) - 
+    \sum_i \lambda_i^* \bigtriangledown c_i(\mathbf{x}^*)
     \label{equ:penalty1}
 \end{align}
 For the corresponding penalty function
@@ -496,43 +497,60 @@ For the corresponding penalty function
 \end{align}
 we have the K-T condition is
 \begin{align}
-    \bigtriangledown P_\sigma (\mathbf{x}) &= 
-    \bigtriangledown f(\mathbf{x}) + 
-    2\sigma \mathbf{c}^T(\mathbf{x}) 
-    \bigtriangledown \mathbf{c}(\mathbf{x}) \\
+    \bigtriangledown P_\sigma (\mathbf{x}^*) &= 
+    \bigtriangledown f(\mathbf{x}^*) + 
+    2\sigma \mathbf{c}^T(\mathbf{x}^*) 
+    \bigtriangledown \mathbf{c}(\mathbf{x}^*) \\
     &= 
-    \bigtriangledown f(\mathbf{x}) + 
-    \sum_i 2\sigma c_i(\mathbf{x}) 
-    \bigtriangledown c_i(\mathbf{x})
+    \bigtriangledown f(\mathbf{x}^*) + 
+    \sum_i 2\sigma c_i(\mathbf{x}^*) 
+    \bigtriangledown c_i(\mathbf{x}^*) = 0
     \label{equ:penalty2}
 \end{align}
 
 If we want (\ref{equ:penalty2}) to be a good
 approximation of (\ref{equ:penalty1}), i.e.,
 \begin{align}
-    \lambda_i \approx - 2 \sigma c_i(\mathbf{x})
+    \lambda_i^* \approx - 2 \sigma c_i(\mathbf{x}^*)
 \end{align}
 
-Notice that $c_i(\mathbf{x}) \approx 0$, so we need
+Notice that $c_i(\mathbf{x}^*) \approx 0$, so we need
 $|\sigma| \rightarrow \infty $.
 
 \subsubsection{Argumented Lagrange function method}
 Consider \emph{Argumented Lagrange function}
 \begin{align}
-    P(\mathbf{x}, \lambda, \sigma) = 
+    \min_{\mathbf{x}, \lambda}
+     \ P(\mathbf{x}, \lambda, \sigma) = 
     \mathcal{L}(\mathbf{x}, \lambda) + 
     \frac{\sigma}{2} \parallel \mathbf{c}
     (\mathbf{x}) \parallel^2
+    \label{pro:argu_lag1}
 \end{align}
 The K-T condition of the function is
 \begin{align}
-    \bigtriangledown P(\mathbf{x}, \lambda, \sigma) &= 
-    \bigtriangledown f(\mathbf{x}) - 
-    \sum_i (\lambda_i - \sigma c_i(\mathbf{x})) \bigtriangledown
-    c_i(\mathbf{x}) \\ &=
-    \bigtriangledown f(\mathbf{x}) - 
-    \sum_i \lambda_i \bigtriangledown
-    c_i(\mathbf{x})
+    \left\{
+        \begin{array}{ll}
+            \bigtriangledown_{\mathbf{x}} P
+            (\mathbf{x}^*, \lambda^*, \sigma) = 0 \\
+            \bigtriangledown_{\lambda} P
+            (\mathbf{x}^*, \lambda^*, \sigma) = 0
+        \end{array}
+        \right.
+\end{align}
+\begin{align}
+    \bigtriangledown_{\lambda} P
+    (\mathbf{x}^*, \lambda^*, \sigma) = 
+    \mathbf{c}(\mathbf{x}) = 0
+\end{align}
+\begin{align}
+    \bigtriangledown_{\mathbf{x}} P(\mathbf{x}^*, \lambda^*, \sigma) &= 
+    \bigtriangledown f(\mathbf{x}^*) - 
+    \sum_i (\lambda_i^* - \sigma c_i(\mathbf{x}^*)) \bigtriangledown
+    c_i(\mathbf{x}^*) \\ &=
+    \bigtriangledown f(\mathbf{x}^*) - 
+    \sum_i \lambda_i^* \bigtriangledown
+    c_i(\mathbf{x}^*) = 0
 \end{align}
 i.e., the K-T condition of $P$ is similar to the original
 problem (\ref{pro:penalty1}).
@@ -544,8 +562,151 @@ problem (\ref{pro:penalty1}).
     $\mathbf{x}^*$ is the strict local minima
     of $P(\mathbf{x}, \lambda^*, \sigma)$.
 \end{theorem}
+\begin{proof}
+    Appearently if $\mathbf{x}^*$ and $\lambda^*$ satisfy
+    the K-T condition of (\ref{pro:penalty1}),
+    then $\mathbf{x}^*$ and $\lambda^*$ also satisfy
+    the K-T condition of (\ref{pro:argu_lag1}).
+    \par
+    For (\ref{pro:argu_lag1}), we can always find
+    $\bar{\sigma}$ when $\sigma > \bar{\sigma}$,
+    the problem is convex. In this case, the
+    K-T condition is sufficient and necessary
+    condition of optimal points.
+\end{proof}
 
-However, the optimal value of $\lambda$ remains
+However, the optimal value $\lambda^*$ remains
 unknown.
 
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Return}{return}
+    \KwData{Cost function $f$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbb{R}^n$, $\sigma_0 > 0$, $\alpha > 1$,
+     $0 < \beta < 1$, $\epsilon > 0$, $k:= 0$\;
+     \While{$\parallel \mathbf{c}(\mathbf{x}^{(k)}\parallel \geq \epsilon$}{
+        $\mathbf{x}^{(k+1)} = 
+        \arg\min_{\mathbf{x}\in \mathbb{R}^n}
+        P(\mathbf{x}, \lambda^{(k)}, \sigma)$\;
+        $\lambda^{(k+1)} = \lambda^{(k)} - 
+        \sigma \mathbf{c}(\mathbf{x}^{(k+1)})$\;
+        \If{$\parallel \mathbf{c}(\mathbf{x}^{(k+1)}\parallel / 
+        \parallel \mathbf{c}(\mathbf{x}^{(k)}\parallel
+        \geq \beta$}{$\sigma := \alpha \sigma$}
+        $k:=k+1$\;
+     }
+     \Return{$\mathbf{x}^{(k)}$}
+     \caption{Argumented Lagrange Algorithm}
+\end{algorithm}
+
+
 \subsection{Barrier method}
+
+\begin{align}
+    \begin{array}{ll}
+        \min \ &f(\mathbf{x}) \\
+        s.t. \ &g_i (\mathbf{x}) \geq 0, i = 1,..., m
+    \end{array}
+    \label{pro:barrier1}
+\end{align}
+
+We use $\mathbf{int}S$ to denote the interior
+of feasible region, where
+$S = \{ \mathbf{x} \ | \ g_i(\mathbf{x}) \geq 0,
+i = 1,...,m \}$. Define \emph{Barrier function}
+\begin{align}
+    B(\mathbf{x}, \theta) = f(\mathbf{x}) + 
+    \theta \psi (\mathbf{x})
+\end{align}
+Where barrier factor $\theta$ is a small positive number,
+$\psi(\mathbf{x})$ is a continuous function.
+When $\mathbf{x} \rightarrow \partial S$,
+$\psi(\mathbf{x}) \rightarrow + \infty$.
+We can derive the approximate solution to
+the original problem (\ref{pro:barrier1})
+\begin{align}
+    \begin{array}{ll}
+        \min \ &B(\mathbf{x}, \theta) \\
+        s.t. \ &\mathbf{x} \in \mathbf{int}S
+    \end{array}
+\end{align}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Return}{return}
+    \KwData{Cost function $f$, feasible region $S$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbf{int}S$, $\theta_0 > 0$,
+     $0 < \beta < 1$, $\epsilon > 0$, $k:= 0$\;
+     \While{$\theta_k \psi(\mathbf{x}^{(k)} \geq \epsilon$}{
+        $\mathbf{x}^{(k+1)} = 
+        \arg\min_{\mathbf{x}\in \mathbf{int}S}
+        f(\mathbf{x}) + \theta_k \psi(\mathbf{x})$\;
+        $\theta_{k+1} := \beta \theta_{k}$\;
+        $k:=k+1$\;
+     }
+     \Return{$\mathbf{x}^{(k)}$}
+     \caption{Barrier Algorithm}
+\end{algorithm}
+
+\begin{theorem}
+    Suppose $\theta_k > \theta_{k+1} > 0$,
+    denote $\mathbf{x}(\theta) = \arg\min_{\mathbf{x}}
+    B(\mathbf{x}, \theta)$, then
+    \begin{align}
+        B(\mathbf{x}(\theta_k), \theta_k)
+        &\geq B(\mathbf{x}(\theta_{k+1}), \theta_{k+1}) \\
+        \psi(\mathbf{x}(\theta_k)) &\leq
+        \psi(\mathbf{x}(\theta_{k+1})) \\
+        f(\mathbf{x}(\theta_k)) &\geq
+        f(\mathbf{x}(\theta_{k+1}))
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Similar to Proof of Lemma (\ref{lemma:penalty1}),
+    \begin{align}
+        B(\mathbf{x}(\theta_k), \theta_k) &= 
+        f(\mathbf{x}(\theta_k))
+        + \theta_k \psi(\mathbf{x}(\theta_k)) \\
+        &\geq f(\mathbf{x}(\theta_k))
+        + \theta_{k+1} \psi(\mathbf{x}(\theta_k)) \\
+        &\geq \min_{\mathbf{x}\in \mathbf{int}S}
+        f(\mathbf{x})
+        + \theta_{k+1} \psi(\mathbf{x}) \\
+        &= B(\mathbf{x}(\theta_{k+1}), \theta_{k+1})
+    \end{align}
+    From
+    \begin{align}
+        &f(\mathbf{x}(\theta_{k+1}))
+        + \theta_k \psi(\mathbf{x}(\theta_{k+1})) \\
+        \geq &f(\mathbf{x}(\theta_k))
+        + \theta_k \psi(\mathbf{x}(\theta_k)) \\
+        \geq &f(\mathbf{x}(\theta_k))
+        + \theta_{k+1} \psi(\mathbf{x}(\theta_k)) \\
+        \geq &f(\mathbf{x}(\theta_{k+1}))
+        + \theta_{k+1} \psi(\mathbf{x}(\theta_{k+1}))
+    \end{align}
+    we have
+    \begin{align}
+        \theta_{k}(\psi(\mathbf{x}(\theta_{k})) - 
+        \psi(\mathbf{x}(\theta_{k+1}))) \leq
+        f(\mathbf{x}(\theta_{k+1})) - 
+        f(\mathbf{x}(\theta_{k})) \leq
+        \theta_{k+1}(\psi(\mathbf{x}(\theta_{k})) - 
+        \psi(\mathbf{x}(\theta_{k+1})))
+    \end{align}
+    notice that $\theta_k > \theta_{k+1} > 0$, so
+    \begin{align}
+        \psi(\mathbf{x}(\theta_k)) \leq
+        \psi(\mathbf{x}(\theta_{k+1}))
+    \end{align}
+    \begin{align}
+        f(\mathbf{x}(\theta_{k+1})) - 
+        f(\mathbf{x}(\theta_{k})) &\leq
+        \theta_{k+1}(\psi(\mathbf{x}(\theta_{k})) - 
+        \psi(\mathbf{x}(\theta_{k+1}))) \leq 0 \\
+        f(\mathbf{x}(\theta_{k+1})) &\leq 
+        f(\mathbf{x}(\theta_{k})) 
+    \end{align}
+\end{proof}
