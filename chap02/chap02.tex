@@ -73,8 +73,10 @@ is that the optimal value might not lie in
 the valid area.
 \par\noindent\textit{Wolfe-Powell Conditions}
 \begin{align}
+    \label{equ:wolfe1}
     \varphi(\alpha) &\leq \varphi(0) + \rho\alpha\varphi'(0) \\
     \varphi'(\alpha) &\geq \sigma\varphi'(0)
+    \label{equ:wolfe2}
 \end{align}
 where $\sigma \in (\rho, 1)$.
 
@@ -86,6 +88,7 @@ where $\sigma \in (\rho, 1)$.
     and $-\bigtriangledown f(x^{(k)})$.
     \begin{align}
         \theta^{(k)} \leq \frac{\pi}{2} - \mu
+        \label{equ:global-convergence1}
     \end{align}
     If step factor is determined by following methods
     \begin{itemize}
@@ -102,9 +105,75 @@ where $\sigma \in (\rho, 1)$.
     Suppose for all $k, \mathbf{g}^{(k)} = 
     \bigtriangledown f(\mathbf{x}^{(k)}) \neq 0$
     and $f(\mathbf{x}^{(k)})$ has finite lower bound.
-    So $f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k+1)})
-    \rightarrow 0$.
+    From (\ref{equ:global-convergence1}), we have
+    $\mathbf{d}^{(k)}$ is descent direction at point
+    $\mathbf{x}^{(k)}$.
+    So from Wolfe-Powell conditions,
+    $f(\mathbf{x}^{(k)})$ decrease monotonically,
+    so $f(\mathbf{x}^{(k)})$ is convergent sequence,
+    then
+    \begin{align}
+        f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k+1)})
+        \rightarrow 0
+    \end{align}
+    From (\ref{equ:wolfe1}), we have
+    \begin{align}
+        -\rho \alpha \varphi'(0) &\leq
+        \varphi(0) - \varphi(\alpha) \\
+        -\rho \alpha \mathbf{g}^{(k)T} \mathbf{d}^{(k)}
+        &\leq f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k+1)}) \\
+        - \mathbf{g}^{(k)T} \mathbf{s}^{(k)}
+        &\leq \frac{f(\mathbf{x}^{(k)}) - f(\mathbf{x}^{(k+1)})}
+        {\rho}
+    \end{align}
+    i.e.,
+    \begin{align}
+        - \mathbf{g}^{(k)T} \mathbf{s}^{(k)} 
+        \rightarrow 0
+    \end{align}
+    If $ \mathbf{g}^{(k)} \rightarrow 0$ do not hold,
+    i.e., $\exists \varepsilon > 0$ and subsequence
+    $\{ \mathbf{x}^{(k)} \}$ such that 
+    $\parallel  \mathbf{g}^{(k)} \parallel \geq \varepsilon$,
+    so
+    \begin{align}
+        - \mathbf{g}^{(k)T} \mathbf{s}^{(k)} = 
+        \parallel \mathbf{g}^{(k)} \parallel
+        \parallel \mathbf{s}^{(k)} \parallel
+        \cos \theta_k \geq \varepsilon 
+        \parallel \mathbf{s}^{(k)} \parallel
+        \sin \mu
+    \end{align}
+    then
+    \begin{align}
+        \parallel \mathbf{s}^{(k)} \parallel
+        \rightarrow 0
+    \end{align}
+    Due to the continuously differentiability of $f$,
+    \begin{align}
+        \mathbf{g}^{(k+1)T} \mathbf{s}^{(k)} - 
+        \mathbf{g}^{(k)T} \mathbf{s}^{(k)} &= 
+        (\bigtriangledown f(\mathbf{x}^{(k+1)})
+        - \bigtriangledown f(\mathbf{x}^{(k)}))^T\mathbf{s}^{(k)} \\
+        &= (\bigtriangledown^2 f(\mathbf{x}^{(k)})\mathbf{s}^{(k)}
+        + o(\mathbf{s}^{(k)}))^T \mathbf{s}^{(k)} \\
+        &= \mathbf{s}^{(k)T}\bigtriangledown^2 f(\mathbf{x}^{(k)})
+        \mathbf{s}^{(k)} + o(\mathbf{s}^{(k)}))^T \mathbf{s}^{(k)} \\
+        &= o(\parallel \mathbf{s}^{(k)} \parallel)
+    \end{align}
+    then
+    \begin{align}
+        \frac{\mathbf{g}^{(k+1)T} \mathbf{s}^{(k)}}
+        {\mathbf{g}^{(k)T} \mathbf{s}^{(k)}}
+        \rightarrow 1
+    \end{align}
+    is conflict with (\ref{equ:wolfe2}), so
+    \begin{align}
+        \mathbf{g}^{(k)}\rightarrow 0
+    \end{align}
 \end{proof}
+
+
 
 \subsection{Steepest Descent Method}
 Steepest Descent Method is a Line Search Method.

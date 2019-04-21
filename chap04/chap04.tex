@@ -175,6 +175,50 @@ $y \in \mathcal{A}$, then the function
 \end{align}
 is convex w.r.t $x$.
 
+\paragraph{Composition with an affine mapping}
+Suppose $f: \mathbb{R}^n \rightarrow \mathbb{R}$,
+$A \in \mathbb{R}^{n\times m}$, and $\mathbf{b} \in \mathbb{R}$.
+Define $g: \mathbb{R}^m \rightarrow \mathbb{R}$ by
+\begin{align}
+    g(\mathbf{x}) = f(A \mathbf{x} + \mathbf{b})
+\end{align}
+with $\mathbf{dom}g = \{ \mathbf{x} \ | \ A\mathbf{x}
++ \mathbf{b} \in \mathbf{dom}f \}$. Then if $f$
+is convex, so is $g$.
+
+\paragraph{Pointwise maximum}
+If $f_1$ and $f_2$ are convex functions, then
+\begin{align}
+    f(x) = \max \{ f_1(x), f_2(x) \}
+\end{align}
+with $\mathbf{dom}f = \mathbf{dom}f_1 \cap \mathbf{dom}f_2$
+is also convex.
+\par
+If $f(x, y)$ is convex w.r.t $x$ for each
+$y \in \mathcal{A}$, and $w(y) \geq 0$ for each
+$y \in \mathcal{A}$, then the function
+\begin{align}
+    g(x) = \sup_{y \in \mathcal{A}}f(x, y)
+\end{align}
+is convex in $x$, where
+\begin{align}
+    \mathbf{dom}g = \{ x \ | \ (x, y) \in \mathbf{dom}f,
+    \forall y \in \mathcal{A}, \sup f(x, y) < \infty \}
+\end{align}
+
+\subsection{Quasi-convex function}
+\begin{definition}[Quasi-convex function]
+    A function $f: \mathbb{R}^n \rightarrow \mathbb{R}$
+    sucha that its domain and all its sublevel sets
+    \begin{align}
+        S_\alpha = \{ x \in \mathbf{dom}f \ | \
+        f(x) \leq \alpha \}, \alpha \in \mathbb{R}
+    \end{align}
+    are convex,
+    then $f$ is \emph{quasi-convex}.
+\end{definition}
+
+
 \section{Convex optimization}
 A \emph{convex optimization problem}
 is one of the form
@@ -283,11 +327,42 @@ in other words,
     \end{align}
 \end{proof}
 
-\subsection{Linear optimization}
+\begin{lemma}[Global optimality]
+    Any locally optimal point is also globally optimal
+    in convex optimization problems.
+\end{lemma}
 
-\subsection{Quadratic optimization}
+\subsection{Common convex optimizations}
+\subsubsection{Linear optimization}
+A general \emph{linear program} (LP) has the form
+\begin{align}
+    \begin{array}{lll}
+        \min \ &\mathbf{c}^T \mathbf{x} + d \\
+        s.t. \ &G\mathbf{x} \leq \mathbf{h} \\
+        &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:lp1}
+\end{align}
+where $G \in \mathbb{R}^{m \times n}$ and
+$A \in \mathbb{R}^{p \times n}$.
 
-\subsubsection{Quadratically constrained quadratic program}
+\subsubsection{Quadratic optimization}
+A general \emph{quadratic program} (QP) has the form
+\begin{align}
+    \begin{array}{lll}
+        \min \ &\frac{1}{2} \mathbf{x}^T P \mathbf{x} + 
+        \mathbf{q}^T \mathbf{x} + r \\
+        s.t. \ &G\mathbf{x} \leq \mathbf{h} \\
+        &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:qp1}
+\end{align}
+where $P \in \mathbf{S}_+^n$,
+$G \in \mathbb{R}^{m \times n}$ and
+$A \in \mathbb{R}^{p \times n}$.
+
+
+\paragraph{Quadratically constrained quadratic program}
 \begin{align}
     \begin{array}{lll}
         \min \ &\frac{1}{2} \mathbf{x}^T P_0 \mathbf{x}
@@ -296,11 +371,15 @@ in other words,
         + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 1,...,m \\
         & A \mathbf{x} = \mathbf{b}
     \end{array}
+    \label{pro:qcqp1}
 \end{align}
+where  $P_i \in \mathbf{S}_+^n, i = 0,...,m$,
+the problem is called a \emph{quadratically constrained
+quadratic program} (QCQP).
 
 
 \par
-\subsubsection{Second-order cone program}
+\paragraph{Second-order cone program}
 \begin{align}
     \begin{array}{lll}
         \min \ & \mathbf{f}^T \mathbf{x} \\
@@ -308,6 +387,7 @@ in other words,
         \leq \mathbf{c}_i^T\mathbf{x} + \mathbf{d}_i, \quad i = 1,...,m \\
         & F\mathbf{x} = \mathbf{g}
     \end{array}
+    \label{pro:socp1}
 \end{align}
 
 \begin{lemma}
@@ -316,13 +396,18 @@ in other words,
 \begin{proof}
     The QCQP problem is equivalent to
     \begin{align}
-        \min \ & - r_0 \\
-        s.t. \ &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
-        + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 0,...,m \\
-        & A \mathbf{x} = \mathbf{b}
+        \begin{array}{lll}
+            \min \ & - r_0 \\
+            s.t. \ &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
+            + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0, \quad i = 0,...,m \\
+            & A \mathbf{x} = \mathbf{b}
+            \label{pro:qcqp2}
+        \end{array}
     \end{align}
-    Then we need to prove that (121) can be formulated as (118).
+    Then we need to prove that (\ref{pro:qcqp2})
+    can be formulated as (\ref{pro:socp1}).
     \begin{align}
+        \label{equ:qcqp1}
         &\frac{1}{2} \mathbf{x}^T P_i \mathbf{x}
         + \mathbf{q}_i^T \mathbf{x} + r_i \leq 0 \\
         \Leftrightarrow \ & \mathbf{x}^T P_i \mathbf{x}
@@ -343,6 +428,7 @@ in other words,
          \Leftrightarrow \ & \parallel A_i \mathbf{x} \parallel^2
          + \parallel \mathbf{q}_i^T \mathbf{x} + r_i + \frac{1}{2}\parallel^2
           \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 
+          \label{equ:qcqp2}
     \end{align}
     Let
     \begin{align}
@@ -357,11 +443,11 @@ in other words,
                     r_i + \frac{1}{2}
                 \end{array}\right)
     \end{align}
-    From (123) and $\mathbf{x}^T P_i \mathbf{x} \geq 0$,
+    From (\ref{equ:qcqp1}) and $\mathbf{x}^T P_i \mathbf{x} \geq 0$,
     we can derive that $\mathbf{q}_i^T \mathbf{x} + r_i \leq 0$,
-    i.e., $\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2} \leq 0$.
+    then, $\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2} \leq 0$.
     \par
-    Then (128) can be formulated as
+    Then (\ref{equ:qcqp2}) can be formulated as
     \begin{align}
         &\parallel A_i'\mathbf{x} + \mathbf{b}_i \parallel^2
         \leq (\mathbf{q}_i^T \mathbf{x} + r_i - \frac{1}{2})^2 \\
@@ -370,4 +456,4 @@ in other words,
     \end{align}
 \end{proof}
 
-\section{The Lagrangian}
+\subsection{The Lagrangian}

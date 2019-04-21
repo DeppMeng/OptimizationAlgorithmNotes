@@ -43,11 +43,11 @@
 \BOOKMARK [2][-]{subsection.4.2.1}{First order condition}{section.4.2}% 43
 \BOOKMARK [2][-]{subsection.4.2.2}{Second order condition}{section.4.2}% 44
 \BOOKMARK [2][-]{subsection.4.2.3}{Properties of Convex functions}{section.4.2}% 45
-\BOOKMARK [1][-]{section.4.3}{Convex optimization}{chapter.4}% 46
-\BOOKMARK [2][-]{subsection.4.3.1}{Optimal condition}{section.4.3}% 47
-\BOOKMARK [2][-]{subsection.4.3.2}{Linear optimization}{section.4.3}% 48
-\BOOKMARK [2][-]{subsection.4.3.3}{Quadratic optimization}{section.4.3}% 49
-\BOOKMARK [1][-]{section.4.4}{The Lagrangian}{chapter.4}% 50
+\BOOKMARK [2][-]{subsection.4.2.4}{Quasi-convex function}{section.4.2}% 46
+\BOOKMARK [1][-]{section.4.3}{Convex optimization}{chapter.4}% 47
+\BOOKMARK [2][-]{subsection.4.3.1}{Optimal condition}{section.4.3}% 48
+\BOOKMARK [2][-]{subsection.4.3.2}{Common convex optimizations}{section.4.3}% 49
+\BOOKMARK [2][-]{subsection.4.3.3}{The Lagrangian}{section.4.3}% 50
 \BOOKMARK [0][-]{chapter.5}{Sparse Optimization}{}% 51
 \BOOKMARK [1][-]{section.5.1}{Compressed Sensing}{chapter.5}% 52
 \BOOKMARK [2][-]{subsection.5.1.1}{Problem formulation}{section.5.1}% 53
