@@ -456,4 +456,740 @@ quadratic program} (QCQP).
     \end{align}
 \end{proof}
 
-\subsection{The Lagrangian}
+\subsection{Lagrange dual problem}
+
+Consider optimization problem
+\begin{align}
+    \begin{array}{lll}
+        \min \ &f_0 (\mathbf{x}) \\
+        s.t. \ &f_i (\mathbf{x}) \leq 0, &i = 1,..., m \\
+         &h_j (\mathbf{x}) = 0, &j = 1,..., p
+    \end{array}
+    \label{pro:conv2}
+\end{align},
+Denote the optimal value of Problem \ref{pro:conv2} by
+$v^*$, but we \emph{do not} assume the problem
+is convex.
+
+Recall the K-T conditions in Chapter $1$, we can define
+\emph{Lagrangian} by
+\begin{definition}[Lagrangian]
+    The Lagrangian $L: \mathbb{R}^n \times \mathbb{R}^m
+    \times \mathbb{R}^p \rightarrow \mathbb{R}$
+    associated with the Problem \ref{pro:conv2} is
+    \begin{align}
+        L(\mathbf{x}, \lambda, \nu) = 
+        f_0(\mathbf{x}) +
+        \sum_{i=1}^m \lambda_i f_i(\mathbf{x}) +
+        \sum_{j=1}^p \nu_j h_i(\mathbf{x})
+    \end{align}
+    with $\mathbf{dom}L = \mathcal{D} \times \mathbb{R}^m
+    \times \mathbb{R}^p$.
+\end{definition}
+\par
+Refer to $\lambda_i$ as the \emph{Lagrange multiplier}
+associated with the $i$th inequality constraint
+$f_i(\mathbf{x}) \leq 0$.
+\par
+Refer to $\nu_j$ as the Lagrange multiplier
+associated with the $j$th inequality constraint
+$h_j(\mathbf{x}) = 0$.
+\par
+The vectors $\lambda$ and $\nu$ are called the
+\emph{dual variables} or \emph{Lagrange multiplier vectors}.
+\begin{definition}
+    The \emph{Lagrange dual function} of Problem
+    \ref{pro:conv2} is
+    \begin{align}
+        g(\lambda, \nu) = \inf_{\mathbf{x} \in \mathcal{D}}
+        L(\mathbf{x}, \lambda, \nu) = 
+        \inf_{\mathbf{x} \in \mathcal{D}}
+        \Big( f_0(\mathbf{x}) +
+        \sum_{i=1}^m \lambda_i f_i(\mathbf{x}) +
+        \sum_{j=1}^p \nu_j h_i(\mathbf{x}) \Big)
+        \label{equ:lagrange1}
+    \end{align}
+\end{definition}
+
+Notice that for all $\mathbf{x} \in \mathcal{D}$,
+$L(\mathbf{x}, \lambda, \nu)$ is affine w.r.t
+$\lambda, \nu$, that is, concave w.r.t $\lambda, \nu$.
+Recall that \emph{Pointwise maximum} operation can
+preserve convexity, i.e., \emph{Pointwise infimum}
+can preserve concavity.
+So the Lagrange dual function is concave.
+\subsubsection{Lower bounds optimal value}
+\begin{theorem}
+    For any $\lambda \geq 0$ and any $\nu$, we have
+    \begin{align}
+        g(\lambda, \nu) \leq v^*
+    \end{align}
+    \label{th:lagrange1}
+\end{theorem}
+\begin{proof}
+    Denote the optimal point of Problem \ref{pro:conv2}
+    as $\mathbf{x}^*$, then appearently $\mathbf{x}^*$
+    is a feasible point, i.e.,
+    \begin{align}
+        \left\{
+            \begin{array}{ll}
+                f_i (\mathbf{x}) \leq 0, &i = 1,..., m \\
+                h_j (\mathbf{x}) = 0, &j = 1,..., p
+            \end{array}
+            \right.
+    \end{align}
+    then we have
+    \begin{align}
+        g(\lambda, \nu) \leq
+        L(\mathbf{x}^*, \lambda, \nu) = 
+        f_0(\mathbf{x}^*) +
+        \sum_{i=1}^m \lambda_i f_i(\mathbf{x}^*) +
+        \sum_{j=1}^p \nu_j h_i(\mathbf{x}^*) \leq f_0(\mathbf{x}^*)
+        = v^*
+    \end{align}
+\end{proof}
+We refer to a pair $(\lambda, \nu)$ with $\lambda \geq 0$
+and $(\lambda, \nu) \in \mathbf{dom}g$ as
+\emph{dual feasible}.
+
+\paragraph{Linear approximation interpretation}
+Define functions
+\begin{align}
+    I\_ (u) = \left\{
+        \begin{array}{ll}
+            0, &u \leq 0 \\
+            + \infty, &u > 0
+        \end{array}
+        \right.
+\end{align}
+\begin{align}
+    I_0 (u) = \left\{
+        \begin{array}{ll}
+            0, &u = 0 \\
+            + \infty, &u \neq 0
+        \end{array}
+        \right.
+\end{align}
+Then the Problem \ref{pro:conv2} is equivalent to
+\begin{align}
+    \min_{\mathbf{x} \in \mathbb{R}^n}
+    f_0(\mathbf{x}) + \sum_{i=1}^m I\_(f_i(\mathbf{x}))
+    + \sum_{j=1}^p I_0(h_j(\mathbf{x}))
+    \label{pro:lagrange1}
+\end{align}
+Appearently (\ref{equ:lagrange1}) is a softer
+version of (\ref{pro:lagrange1}),
+so Theorem \ref{th:lagrange1} holds.
+
+\subsubsection{The Lagrange dual problem}
+To attain the best lower bound of $v^*$,
+we can solve the following optimization problem
+\begin{align}
+    \begin{array}{ll}
+        \max \ &g(\lambda, \nu) \\
+        s.t. \ &\lambda \geq 0
+    \end{array}
+    \label{pro:largrange-dual}
+\end{align}
+This problem is called \emph{Lagrange dual problem}
+associated with Problem \ref{pro:conv2}.
+Correspondingly, Problem \ref{pro:conv2}
+is called the \emph{primal problem}.
+\par
+We refer $(\lambda^*, \nu^*)$ as \emph{dual optimal}
+or \emph{optimal Lagrange multipliers} if they are
+optimal for Problem \ref{pro:largrange-dual}.
+\par
+Notice that the Lagrange dual problem is convex
+whether the primal problem is convex or not.
+
+\subsubsection{Weak duality}
+For the optimal value of Lagrange dual
+problem \ref{pro:largrange-dual} $g^*$,
+we have
+\begin{align}
+    g^* \leq v^*
+\end{align}
+This property is called \emph{weak duality}.
+\par
+$v^* - g^*$ is the \emph{optimal duality gap}
+of the primal problem.
+
+\subsubsection{Strong duality}
+For the optimal value of Lagrange dual
+problem \ref{pro:largrange-dual} $g^*$,
+if
+\begin{align}
+    g^* = v^*
+\end{align}
+holds, then we say that \emph{weak duality} holds.
+
+\begin{definition}[Strictly feasible]
+    For a feasible point $\mathbf{x}$, if
+    \begin{align}
+        &f_i(\mathbf{x}) < 0, i = 1,..., m \\
+        &A\mathbf{x} = \mathbf{b}
+    \end{align}
+    holds, then we called $\mathbf{x}$ is
+    \emph{strictly feasible}.
+\end{definition}
+
+\begin{definition}[Relative interior]
+    The \emph{relative interior} of set $\mathcal{D}$ is
+    \begin{align}
+        \mathbf{relint}\mathcal{D} = 
+        \{ \mathbf{x} \in \mathcal{D} \ | \ \exists r > 0, 
+        B(\mathbf{x}, r) \cap \mathbf{aff}\mathcal{D}
+        \subset \mathcal{D}\}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Slater's condition]
+    If there exists an $\mathbf{x} \in \mathbf{relint}
+    \mathcal{D}$ that is strictly feasible, 
+    then strong duality holds (and the problem is convex).
+\end{theorem}
+
+\subsubsection{Complementary slackness}
+If strong duality holds, i.e.,
+\begin{align}
+    f_0(\mathbf{x}^*) &= 
+    g(\lambda^*, \nu^*) \\
+    &= \inf_{\mathbf{x}} \Big(f_0(\mathbf{x}) +
+    \sum_{i=1}^m \lambda_i^* f_i(\mathbf{x}) +
+    \sum_{j=1}^p \nu_j^* h_i(\mathbf{x})
+    \Big) \\
+    &\leq f_0(\mathbf{x}^*) +
+    \sum_{i=1}^m \lambda_i^* f_i(\mathbf{x}^*) +
+    \sum_{j=1}^p \nu_j^* h_i(\mathbf{x}^*) \\
+    &\leq f_0(\mathbf{x}^*)
+\end{align}
+Notice that $\lambda_i^* \geq 0$ and
+$f_i(\mathbf{x}^*) \leq 0$, we have 
+\begin{align}
+    \lambda_i^* f_i(\mathbf{x}^*) = 0, i = 1,..., m
+    \label{equ:comp-slack}
+\end{align}
+This condition is known as \emph{complementary slackness}.
+
+\subsection{KKT optimality conditions}
+\subsubsection{KKT optimality conditions for nonconvex problems}
+
+Consider optimization problem
+
+\begin{align}
+    \begin{array}{lll}
+        \min \ &f_0 (\mathbf{x}) \\
+        s.t. \ &f_i (\mathbf{x}) \leq 0, &i = 1,..., m \\
+         &h_j (\mathbf{x}) = 0, &j = 1,..., p
+    \end{array}
+    \label{pro:conv3}
+\end{align}
+Assume that $f_0,..., f_m, h_1,...,h_p$ are
+differentiable. Let $\mathbf{x}^*$ and
+$(\lambda^*, \nu^*)$ be any primal and dual
+optimal points with \emph{zero} duality gap.
+\par
+Summarize the optimal conditions, we have
+\begin{align}
+    (KKT)\left\{
+    \begin{array}{lllll}
+        f_i(\mathbf{x}^*) \leq 0, i = 1,...,m \\
+        h_j(\mathbf{x}^*) = 0, j = 1,...,p \\
+        \lambda_i^* \geq 0, i = 1,...,m \\
+        \lambda_i^* f_i(\mathbf{x}^*) = 0, i = 1,...,m \\
+        \bigtriangledown f_0(\mathbf{x}^*) +
+        \sum_{i=1}^m \lambda_i^* \bigtriangledown f_i(\mathbf{x}^*) +
+        \sum_{j=1}^p \nu_j^* \bigtriangledown h_i(\mathbf{x}^*)=0
+    \end{array}    
+    \right.
+\end{align}
+Recall the K-T conditions (\ref{sys:k-t}) in Chapter 1,
+we can see that the assumption is a little bit different.
+\par
+{\color{red} The relation between K-T condition and
+Slater's condition?}
+
+\subsubsection{KKT optimality conditions for convex problems}
+If Problem \ref{pro:conv3} is convex, then the KKT conditions
+are also sufficient for primal and dual optimality. That is to say,
+if $f_i$ are convex and $h_i$ are affine, then any points satisfy
+the KKT conditions are primal and dual potimal points
+\emph{with zero duality gap}.
+
+
+\section{Newton method for equality constrained problems}
+\subsection{Problem formulation}
+A convex optimization problem with equality constraints
+\begin{align}
+    \begin{array}{ll}
+        \min \ &f(\mathbf{x}) \\
+        s.t. \ &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:conv-equ-constraint}
+\end{align}
+where $f:\mathbb{R}^n \rightarrow \mathbb{R}$ is convex
+and twice continuously differentiable, and
+$A \in \mathbb{R}^{p \times n}$ with
+$\mathbf{rank}A = p < n$. We assume that an
+optimal point $\mathbf{x}^*$ exists and $v^* = f(\mathbf{x}^*)$.
+\par
+Recall the Newton Method for unconstrained problems, i.e.,
+find the minima of the quadratic approximation model.
+\begin{align}
+    \begin{array}{ll}
+        \min_{\mathbf{s}} \ &f(\mathbf{x} + \mathbf{s}) \\
+        s.t. \ &A(\mathbf{x} + \mathbf{s}) = \mathbf{b}
+    \end{array}
+    \label{pro:newton-equ-constraint}
+\end{align}
+From K-T condition, we have
+\begin{align}
+    \left\{
+        \begin{array}{ll}
+            \bigtriangledown f(\mathbf{x} + \mathbf{s}) + A^T \lambda = 0 \\
+             A(\mathbf{x} + \mathbf{s}) = \mathbf{b}
+        \end{array}\right.
+        \label{equ:newton-kt1}
+\end{align}
+Similarly we derive the Newton step in this case.
+
+\subsection{Newton method with feasible start}
+This method requires a feasible initial point. The
+Newton step is the solution of the problem
+\begin{align}
+    \begin{array}{ll}
+        \min \ &\frac{1}{2}\mathbf{s}^T \bigtriangledown^2 f(\mathbf{x})
+        \mathbf{s} + \bigtriangledown f(\mathbf{x})^T \mathbf{s}
+        + f(\mathbf{x}) \\
+        s.t. \ &A(\mathbf{x} + \mathbf{s}) = \mathbf{b}
+    \end{array}
+    \label{pro:newton-equ1}
+\end{align}
+Notice that the initial point $\mathbf{x} \in \mathcal{S}$, so that
+$A\mathbf{x} = \mathbf{b}$, then we have
+\begin{align}
+    \begin{array}{ll}
+        \min \ &\frac{1}{2}\mathbf{s}^T \bigtriangledown^2 f(\mathbf{x})
+        \mathbf{s} + \bigtriangledown f(\mathbf{x})^T \mathbf{s}
+        + f(\mathbf{x}) \\
+        s.t. \ &A\mathbf{s} = \mathbf{0}
+    \end{array}
+    \label{pro:newton-equ2}
+\end{align}
+The K-T condition of the problem \ref{pro:newton-equ2} is
+\begin{align}
+    \left\{
+        \begin{array}{ll}
+            \bigtriangledown^2 f(\mathbf{x})^T \delta_x
+             + \bigtriangledown f(\mathbf{x}) + A^T \lambda = 0 \\
+             A\delta_x = 0
+        \end{array}\right.
+        \label{equ:newton-kt2}
+\end{align}
+We can rewrite (\ref{equ:newton-kt1}) into matrix form, which is
+\begin{align}
+    \begin{bmatrix}
+        \bigtriangledown^2 f(\mathbf{x}) &A^T \\
+        A & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        \delta_x \\
+        \lambda
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        -\bigtriangledown f(\mathbf{x}) \\
+        0
+    \end{bmatrix}
+\end{align}
+
+\subsubsection{Termination condition}
+Define the Newton decrement as
+\begin{align}
+    \mathcal{K}(\mathbf{x}) = (\delta^{T}_x \bigtriangledown^2 f(\mathbf{x})
+    \delta_x)^{\frac{1}{2}} 
+\end{align}
+
+Since
+\begin{align}
+    \frac{\partial f(\mathbf{x} + \alpha \delta_x)}{\partial \alpha} |_{\alpha=0}
+    = - \mathcal{K}(\mathbf{x})^2
+\end{align}
+
+So the algorithm should terminate when $\mathcal{K}(\mathbf{x})$ is small.
+\subsubsection{Algorithm}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Return}{return}
+    \KwData{Cost function $f$, feasible region $S$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbf{int}S$, $\epsilon > 0$, $k:= 0$\;
+     \While{$\mathcal{K}(\mathbf{x}^{(k)}) \geq \epsilon$}{
+        Compute $\delta_x$ and $\mathcal{K}(\mathbf{x}^{(k)})$\;
+        Line search for step size $\alpha$\;
+        $\mathbf{x}^{(k+1)} := \mathbf{x}^{(k)} + \alpha \delta_x$\;
+        $k:=k+1$\;
+     }
+     \Return{$\mathbf{x}^{(k)}$}
+     \caption{Newton method with feasible start}
+\end{algorithm}
+
+\subsection{Newton method with infeasible start}
+Consider the case that initial point $\mathbf{x} \notin S$,
+we can apply
+\begin{align}
+    A\mathbf{x} = \mathbf{b}
+\end{align}
+to simplify (\ref{equ:newton-kt1}).
+In this case, we can write the matrix form of the iteration
+of Newton step $\delta_x$ and $\lambda$ by
+\begin{align}
+    \begin{bmatrix}
+        \bigtriangledown^2 f(\mathbf{x}) &A^T \\
+        A & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        \delta_x \\
+        \lambda
+    \end{bmatrix} = -
+    \begin{bmatrix}
+        \bigtriangledown f(\mathbf{x}) \\
+        A\mathbf{x} - \mathbf{b}
+    \end{bmatrix}
+    \label{equ:newton-update1}
+\end{align}
+
+\subsubsection{A Primal-dual Interpretation}
+Recall problem \ref{pro:conv-equ-constraint},
+we can derive the K-T condition of the problem
+\begin{align}
+    \left\{
+        \begin{array}{ll}
+            \bigtriangledown f(\mathbf{x}) + A^T \lambda = 0 \\
+             A\mathbf{x} = \mathbf{b}
+        \end{array}\right.
+        \label{equ:conv-equ-kt1}
+\end{align}
+Define $r: \mathbb{R}^n \times \mathbb{R}^p \rightarrow \mathbb{R}^n \times \mathbb{R}^p$ as
+\begin{align}
+    r(\mathbf{x}, \lambda) = (\bigtriangledown f(\mathbf{x}) + A^T \lambda, A\mathbf{x} - \mathbf{b})^T
+\end{align}
+where the first and second term is called the \emph{dual} and \emph{primal residual},
+respectively. Then the K-T condition can be expressed as
+\begin{align}
+    r(\mathbf{x}, \lambda) = 0
+\end{align}
+Apply Lagrange-Newton iteration to $r(\mathbf{x}, \lambda)$ we can derive
+\begin{align}
+    r(\mathbf{x} + \delta_x, \lambda + \delta_\lambda) \approx
+    r(\mathbf{x}, \lambda) + J_r(\mathbf{x}, \lambda)
+    \begin{pmatrix}
+        \delta_x \\
+        \delta_\lambda
+    \end{pmatrix} = 0
+\end{align}
+that is
+\begin{align}
+    \begin{bmatrix}
+        \bigtriangledown^2 f(\mathbf{x}) &A^T \\
+        A & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        \delta_x \\
+        \delta_\lambda
+    \end{bmatrix} = -
+    \begin{bmatrix}
+        \bigtriangledown f(\mathbf{x}) + A^T \lambda \\
+        A\mathbf{x} - \mathbf{b}
+    \end{bmatrix}
+    \label{equ:newton-update2}
+\end{align}
+Notice that $\lambda := \lambda + \delta_\lambda$, then
+(\ref{equ:newton-update1}) is equivalent to (\ref{equ:newton-update2}).
+
+\subsubsection{Algorithm}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Return}{return}
+    \KwData{Cost function $f$, feasible region $S$}
+    % \KwResult{Write here the result }
+     $x^{(0)} \in \mathbf{dom}f$, $\epsilon > 0$,
+     $\tau \in (0, 1/2)$, $\gamma \in (0, 1)$, $k:= 0$\;
+     \While{$A\mathbf{x}^{(k)} \neq \mathbf{b}$ or 
+     $\parallel r(\mathbf{x}^{(k)}, \lambda^{(k)}) \parallel_2 \geq \epsilon$}{
+        Compute $\delta_x$ and $\delta_\lambda$\;
+        Backtracking line search for step size $\alpha$\;
+        $\alpha:= 1$\;
+        \While{$\parallel r(\mathbf{x}^{(k)} + \alpha \delta_x, \lambda^{(k)} + \alpha \delta_\lambda)
+        \parallel_2 > (1 - \tau\alpha)\parallel r(\mathbf{x}^{(k)}, \lambda^{(k)})\parallel_2$}
+        {
+            $\alpha := \gamma \alpha$\;
+        }
+        $\mathbf{x}^{(k+1)} := \mathbf{x}^{(k)} + \alpha \delta_x$\;
+        $\lambda^{(k+1)} := \lambda^{(k)} + \alpha \delta_\lambda$\;
+        $k:=k+1$\;
+     }
+     \Return{$\mathbf{x}^{(k)}$}
+     \caption{Newton method with infeasible start}
+\end{algorithm}
+
+
+
+\section{Interior point method}
+For inequality constrained convex problem
+\begin{align}
+    \begin{array}{lll}
+        \min \ &f_0(\mathbf{x}) \\
+        s.t. \ &f_i(\mathbf{x}) \leq 0, i = 1,..., m \\
+         &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:conv-inequ-constraint}
+\end{align}
+where $f_i: \mathbb{R}^n \rightarrow \mathbb{R}, i=0,..., m$ are
+convex and twice continuously differentiable, and
+$A \in \mathbb{R}^{p\times n}$ with $\mathbf{rank}A = p < n$.
+We assume that an optimal $\mathbf{x}^*$ exists and denote the optimal
+value $f_0(\mathbf{x}^*)$ as $v^*$.
+\par
+We also assume that the problem is strictly feasible, i.e.,
+$\exists \mathbf{x} \in \mathcal{D}$ satisfying
+$A\mathbf{x} = \mathbf{b}$ and $f_i(\mathbf{x}) < 0, i=1,...,m$.
+\par
+This means that Slater's constraint qualification holds,
+and therefore strong duality holds, so there exists dual
+optimal $\lambda^* \in \mathbb{R}^m$, $\nu^* \in \mathbb{R}^p$,
+which together with $\mathbf{x}^*$ staisfy KKT conditions
+\begin{align}
+    \begin{array}{lllll}
+        \bigtriangledown f_0(\mathbf{x}^*) + \sum_{i=1}^m \lambda^*_i
+        \bigtriangledown f_i(\mathbf{x}^*)& + A^T \nu^* &= 0 \\
+        &\lambda^* &\geq 0 \\
+        &f_i(\mathbf{x}^*) &\leq 0, \quad i = 1,...,m \\
+        &A\mathbf{x}^* &= \mathbf{b} \\
+        &\lambda^*_if_i(\mathbf{x}^*) &= 0, \quad i = 1,...,m
+    \end{array}
+\end{align}
+
+\subsection{Barrier interior-point method}
+Recall the barrier method in Chapter 3, we can
+rewrite inequality constrained problem \ref{pro:conv-inequ-constraint}
+into
+\begin{align}
+    \begin{array}{ll}
+        \min \ &f_0(\mathbf{x}) + \sum_{i=1}^m I_{-}(f_i(\mathbf{x})) \\
+        s.t. \ &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:conv-inequ-barrier1}
+\end{align}
+
+where
+\begin{align}
+    I_{-}(u) = \left\{
+        \begin{array}{ll}
+            0 \quad &u \leq 0 \\
+            \infty &u > 0
+        \end{array}\right.
+\end{align}
+In barrier method, we approximate the indicator function $I_{-}$ by
+\begin{align}
+    \hat{I}_{-}(u) = - \frac{1}{t}\log (-u)
+\end{align}
+Obviously $\hat{I}_{-}$ is convex and differentiable.
+Then we substitude $\hat{I}_{-}$ for $I_{-}$ in (\ref{pro:conv-inequ-barrier1}),
+result in
+\begin{align}
+    \begin{array}{ll}
+        \min \ &f_0(\mathbf{x}) - \sum_{i=1}^m \frac{1}{t} \log (f_i(\mathbf{x})) \\
+        s.t. \ &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:conv-inequ-barrier2}
+\end{align}
+The function
+\begin{align}
+    \Phi(\mathbf{x}) = - \sum_{i=1}^m \log (-f_i(\mathbf{x}))
+\end{align}
+is called the \emph{logarithmic barrier} with
+\begin{align}
+    \mathbf{dom}\Phi = \{ \mathbf{x} \in \mathbb{R}^n \ | \ f_i(\mathbf{x}) < 0, i = 1,...,m \}
+\end{align}
+
+\subsubsection{Central path}
+We rewrite problem \ref{pro:conv-inequ-barrier2}
+into an equivalent form
+\begin{align}
+    \begin{array}{ll}
+        \min \ &tf_0(\mathbf{x}) + \Phi(\mathbf{x}) \\
+        s.t. \ &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:conv-inequ-barrier3}
+\end{align}
+We assume that the problem \ref{pro:conv-inequ-barrier3}
+can be solved by Newton method and has unique solution for
+each $t > 0$.
+\par
+For $t > 0$ we define $\mathbf{x}^*(t)$ as the solution of
+(\ref{pro:conv-inequ-barrier3}), the set of points $\mathbf{x}^*(t), t>0$
+us called \emph{central path}.
+
+From the K-T condition of (\ref{pro:conv-inequ-barrier3}),
+we have $\mathbf{x}^*(t)$ satisfies $\exists \nu \in \mathbb{R}^p$ such that
+\begin{align}
+    t \bigtriangledown f_0(\mathbf{x}^*(t)) + \bigtriangledown \Phi(\mathbf{x}^*(t))
+    + A^T \nu = 0 \\
+    t \bigtriangledown f_0(\mathbf{x}^*(t)) + \sum_{i=1}^m
+    \frac{1}{-f_i(\mathbf{x}^*(t))} \bigtriangledown f_i(\mathbf{x}^*(t))
+    + A^T \nu = 0
+    \label{equ:conv-int-1}
+\end{align}
+\par
+Define
+\begin{align}
+    \lambda^*_i(t) &= -\frac{1}{tf_i(\mathbf{x}^*(t))}, i = 1, ..., m \\
+    \nu^*(t) &= \nu/t
+\end{align}
+From $f_i(\mathbf{x}^*(t)) < 0, i = 1,..., m$, we have
+$\lambda^*(t) > 0$.
+\par
+Then (\ref{equ:conv-int-1}) can be expressed as
+\begin{align}
+    \bigtriangledown f_0(\mathbf{x}^*(t)) + \sum_{i=1}^m
+    \lambda^*(t) \bigtriangledown f_i(\mathbf{x}^*(t))
+    + A^T \nu^*(t) = 0
+    \label{equ:conv-int-2}
+\end{align}
+We can see that $\mathbf{x}^*(t)$ is the minima of the Lagrangian
+\begin{align}
+    \mathcal{L}(\mathbf{x}, \lambda^*(t), \nu^*(t)) = 
+    f_0(\mathbf{x}) + \sum_{i=1}^m \lambda_i^*(t) f_i(\mathbf{x}) + \nu^*(t)^T(A\mathbf{x} - \mathbf{b})
+    \label{equ:conv-int-3}
+\end{align}
+due to the convexsity of (\ref{equ:conv-int-3}).
+That is to say,
+\begin{align}
+    g(\lambda^*(t), \nu^*(t)) =
+    \mathcal{L}(\mathbf{x}^*(t), \lambda^*(t), \nu^*(t) =
+    \min_{\mathbf{x}}
+    \mathcal{L}(\mathbf{x}, \lambda^*(t), \nu^*(t))
+\end{align}
+Notice that
+\begin{align}
+    g(\lambda^*(t), \nu^*(t)) &= 
+    f_0(\mathbf{x}^*(t)) + \sum_{i=1}^m \lambda_i^*(t)
+    f_i(\mathbf{x}^*(t)) + \nu^*(t)^T(A\mathbf{x}^*(t) - \mathbf{b}) \\
+    &= f_0(\mathbf{x}^*(t)) + \sum_{i=1}^m -\frac{1}{tf_i(\mathbf{x}^*(t))}
+    f_i(\mathbf{x}^*(t)) \\
+    &=f_0(\mathbf{x}^*(t)) - \frac{m}{t}
+\end{align}
+Then, we have
+\begin{align}
+    f_0(\mathbf{x}^*(t)) = g(\lambda^*(t), \nu^*(t))
+    + \frac{m}{t} \leq g(\lambda^*, \nu^*) + \frac{m}{t}
+    = f_0(\mathbf{x}^*) + \frac{m}{t}
+\end{align}
+\begin{align}
+    f_0(\mathbf{x}^*(t)) - f_0(\mathbf{x}^*) \leq \frac{m}{t}
+\end{align}
+that is, $\mathbf{x}^*(t) \rightarrow \mathbf{x}^*$. 
+
+\subsubsection{Algorithm}
+
+\begin{algorithm}[H]
+    \SetAlgoLined
+    \SetKwInOut{Return}{return}
+    \KwData{Cost function $f$, feasible region $S$}
+    % \KwResult{Write here the result }
+     Strictly feasible $\mathbf{x}^{(0)}$, $\mu > 1$, $\epsilon > 0$,
+     $t > 0$, $k:= 0$\;
+     \While{$m/t \geq \epsilon$}{
+        Use Newton method to compute $\mathbf{x}^{(k)} = \mathbf{x}^*(t)$
+        with initial point $\mathbf{x}^{(k-1)}$\;
+        $t:=\mu t$\;
+        $k:=k+1$\;
+     }
+     \Return{$\mathbf{x}^{(k)}$}
+     \caption{Barrier interior-point algorithm}
+\end{algorithm}
+\subsubsection{Discussion}
+The step that use Newton method to compute $\mathbf{x}^*(t)$
+requires iterations, which we called the \emph{inner iterations}.
+\paragraph{Selection of $\mu$}
+If $\mu$ is large, then $\mathbf{x}^{(k+1)}$ might
+be dramatically different from $\mathbf{x}^{(k)}$.
+That means that more inner iterations will be required.
+\par
+If $\mu$ is small, then less inner iterations is required
+but on the contrary, there will be a large number of outer iterations.
+\par
+The influence of the selection of $t$ can be conducted similarly.
+
+\subsubsection{Newton step for computing $\mathbf{x}^*(t)$}
+For Step $1$ in the Barrier interior-point method, i.e.,
+solve $\mathbf{x}^*(t)$ in (\ref{pro:conv-inequ-barrier3}),
+we do not necessarily need the exact solution, an approximate
+$\mathbf{x}^*(t)$ is enough.
+\par
+The Newton method for problem \ref{pro:conv-inequ-barrier3}
+is equivalent to solve the problem
+\begin{align}
+    \begin{array}{ll}
+        \min \ &(\mathbf{x}+\mathbf{s})^T (t\bigtriangledown^2 f_0(\mathbf{x})
+        + \bigtriangledown^2 \Phi(\mathbf{x}))(\mathbf{x}+\mathbf{s}) + 
+        (t\bigtriangledown f_0(\mathbf{x}) + \bigtriangledown \Phi(\mathbf{x}))^T
+        (\mathbf{x} + \mathbf{s}) \\
+        s.t. \ &A(\mathbf{x} + \mathbf{s}) = \mathbf{b}
+    \end{array}
+\end{align}
+Then we apply the Newton method for equality constrained convex optimization
+problems with feasible start, that is,
+\begin{align}
+    \begin{bmatrix}
+        t\bigtriangledown^2 f_0(\mathbf{x})
+        + \bigtriangledown^2 \Phi(\mathbf{x}) &A^T \\
+        A &0
+    \end{bmatrix}
+    \begin{bmatrix}
+        \delta_x \\
+        \nu
+    \end{bmatrix}
+    = \begin{bmatrix}
+        t\bigtriangledown f_0(\mathbf{x})
+        + \bigtriangledown \Phi(\mathbf{x}) \\
+        0
+    \end{bmatrix}
+\end{align}
+The Newton step above can be interpreted as solving
+the \emph{modified KKT equations}
+\begin{align}
+    \begin{array}{lll}
+        \bigtriangledown f_0(\mathbf{x}) + \sum_{i=1}^m \lambda_i
+        \bigtriangledown f_i(\mathbf{x})& + A^T \nu &= 0 \\
+        &A\mathbf{x} &= \mathbf{b} \\
+        &-\lambda_if_i(\mathbf{x}) &= \frac{1}{t}, \quad i = 1,...,m
+    \end{array}
+\end{align}
+when $\delta_x$ is small.
+
+\subsubsection{Basic phase I method}
+Notice that the Barrier interior-point method requires a
+strictly feasible starting point $\mathbf{x}^{(0)}$,
+so we need to use a algorithm to find it.
+\par
+A strictly feasible point can be found by solving the
+following problem
+\begin{align}
+    \begin{array}{lll}
+        \min_{\mathbf{x} \in \mathbb{R}^n, s \in \mathbb{R}} \ &s \\
+        s.t. \ &f_i(\mathbf{x}) \leq s, \quad i = 1,.., m \\
+        &A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:conv-barrier-phase-1}
+\end{align}
+For every $\mathbf{x}$, we can find some proper $s$
+such that $(\mathbf{x}, s)$ is feasible, so we can apply
+the Barrier interior-point method to solve (\ref{pro:conv-barrier-phase-1})
+to derive a strictly feasible point for the Barrier interior-point method.
+
+\subsection{Primal-dual interior-point method}
+
