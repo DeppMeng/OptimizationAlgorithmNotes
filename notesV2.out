@@ -59,5 +59,22 @@
 \BOOKMARK [0][-]{chapter.5}{Sparse Optimization}{}% 59
 \BOOKMARK [1][-]{section.5.1}{Compressed Sensing}{chapter.5}% 60
 \BOOKMARK [2][-]{subsection.5.1.1}{Problem formulation}{section.5.1}% 61
-\BOOKMARK [2][-]{subsection.5.1.2}{Restricted Isometry Property}{section.5.1}% 62
-\BOOKMARK [2][-]{subsection.5.1.3}{Pursuit Algorithms}{section.5.1}% 63
+\BOOKMARK [2][-]{subsection.5.1.2}{Orthogonal Matching Pursuit}{section.5.1}% 62
+\BOOKMARK [2][-]{subsection.5.1.3}{Basis Pursuit}{section.5.1}% 63
+\BOOKMARK [1][-]{section.5.2}{Sparse Modeling}{chapter.5}% 64
+\BOOKMARK [1][-]{section.5.3}{Sparse Optimization Algorithms}{chapter.5}% 65
+\BOOKMARK [2][-]{subsection.5.3.1}{BP denoising and LASSO}{section.5.3}% 66
+\BOOKMARK [2][-]{subsection.5.3.2}{Shrinkage}{section.5.3}% 67
+\BOOKMARK [1][-]{section.5.4}{Alternating Direction Method of Multipliers}{chapter.5}% 68
+\BOOKMARK [2][-]{subsection.5.4.1}{Dual Ascent}{section.5.4}% 69
+\BOOKMARK [2][-]{subsection.5.4.2}{Dual Decomposition}{section.5.4}% 70
+\BOOKMARK [2][-]{subsection.5.4.3}{Argmented Lagrangians and the Method of Multipliers}{section.5.4}% 71
+\BOOKMARK [2][-]{subsection.5.4.4}{ADMM}{section.5.4}% 72
+\BOOKMARK [2][-]{subsection.5.4.5}{Proximal Method}{section.5.4}% 73
+\BOOKMARK [0][-]{chapter.6}{Stochasitc Optimization}{}% 74
+\BOOKMARK [0][-]{chapter.7}{Combinational Optimization}{}% 75
+\BOOKMARK [1][-]{section.7.1}{Network Optimization}{chapter.7}% 76
+\BOOKMARK [1][-]{section.7.2}{Graph Theory}{chapter.7}% 77
+\BOOKMARK [1][-]{section.7.3}{Integer Optimization}{chapter.7}% 78
+\BOOKMARK [1][-]{section.7.4}{The Knapsack Problem}{chapter.7}% 79
+\BOOKMARK [1][-]{section.7.5}{The Traveling Salesman Problem}{chapter.7}% 80

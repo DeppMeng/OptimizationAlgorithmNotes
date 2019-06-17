@@ -61,20 +61,7 @@ Then we have the following theorem:
     the sparsest possible.
 \end{theorem}
 
-\subsection{Restricted Isometry Property}
-Consider problem
-\begin{align}
-    (\textnormal{P}_1) \quad
-    \begin{array}{ll}
-        \min_{\mathbf{x} \in \mathbb{R}^n}
-        \ &\parallel \mathbf{x} \parallel_1 \\
-        s.t. \ &A\mathbf{x} = \mathbf{b}
-    \end{array}
-\end{align}
-
-\subsection{Pursuit Algorithms}
-\subsubsection{Orthogonal Matching Pursuit}
-
+\subsection{Orthogonal Matching Pursuit}
 \begin{algorithm}[H]
     \SetAlgoLined
     \SetKwInOut{Return}{return}
@@ -87,4 +74,246 @@ Consider problem
      \caption{OMP Algorithm}
 \end{algorithm}
 
-\subsubsection{Basis Pursuit}
+
+\subsection{Basis Pursuit}
+Consider problem
+\begin{align}
+    (\textnormal{P}_1) \quad
+    \begin{array}{ll}
+        \min_{\mathbf{x} \in \mathbb{R}^n}
+        \ &\parallel \mathbf{x} \parallel_1 \\
+        s.t. \ &A\mathbf{x} = \mathbf{b}
+    \end{array}
+\end{align}
+
+\begin{align}
+    (\textnormal{P}_1^\varepsilon) \quad
+    \begin{array}{ll}
+        \min_{\mathbf{x} \in \mathbb{R}^n}
+        \ &\parallel \mathbf{x} \parallel_1 \\
+        s.t. \ &\parallel \mathbf{b} - A\mathbf{x} \parallel \leq \varepsilon
+    \end{array}
+\end{align}
+as the $L1$ relaxation problem of $(P_0)$.
+\par
+\begin{definition}[RIP]
+    A matrix $A \in \mathbb{R}^{m\times n}$
+    is said to have the restricted isometry property
+    $RIP(\delta; s)$ if each submatrix $A_s$ formed
+    by combining at most $s$ columns of $A$ has its
+    nonzero singular values bounded above by $1 + \delta$
+    and below $1 - \delta$.
+\end{definition}
+
+\begin{theorem}[Candes and Tao]
+    Problem $(P_1)$ and $(P_0)$ have
+    identical solutions on all $s$-sparse
+    vectors and, $(P_1^\varepsilon)$ stably
+    approximates the sparsest near-solution
+    of $\mathbf{b} = A \mathbf{x} + \mathbf{v}$
+    with a reasonable stability coefficient
+    if $A \in RIP(\sqrt{2} - 1; 2s)$.
+\end{theorem}
+
+\section{Sparse Modeling}
+\section{Sparse Optimization Algorithms}
+\subsection{BP denoising and LASSO}
+\subsection{Shrinkage}
+\section{Alternating Direction Method of Multipliers}
+\subsection{Dual Ascent}
+Consider the equality-constrained convex optimization problem
+\begin{align}
+    \begin{array}{ll}
+        \min \ & f(\mathbf{x}) \\
+        s.t. \ & A\mathbf{x} = \mathbf{b}
+    \end{array}
+    \label{pro:dual-ascent}
+\end{align}
+where $f: \mathbb{R}^n \rightarrow \mathbb{R}$ is convex.
+\par
+The Lagrangian for problem is
+\begin{align}
+    L(\mathbf{x}, \mathbf{y}) = f(\mathbf{x}) + \mathbf{y}^T
+    (A\mathbf{x} + \mathbf{b})
+\end{align}
+thus, the dual function is
+\begin{align}
+    g(\mathbf{y}) = \inf_\mathbf{x} L(\mathbf{x}, \mathbf{y})
+    = \inf_{\mathbf{x}} f(\mathbf{x}) + \mathbf{y}^T
+    (A\mathbf{x} + \mathbf{b})
+\end{align}
+From the analysis in convex optimization,
+we know that if the strong duality holds,
+the optimal value of dual problem is the same
+as the primal problem, which is,
+\begin{align}
+    v^* = \max_\mathbf{y} \min_\mathbf{x} L(\mathbf{x}, \mathbf{y})
+\end{align}
+We can recover primal optimal point $\mathbf{x}^*$
+from a dual optimal point $\mathbf{y}^*$ as
+\begin{align}
+    \mathbf{x}^* = \arg\min_{\mathbf{x}} L(\mathbf{x}, \mathbf{y}^*)
+\end{align}
+
+In thte \emph{dual ascent method},
+we solve the dual problem using gradient
+ascent.
+Assuming $g$ is differnetiable, then
+$\bigtriangledown_\mathbf{y} g(\mathbf{y}) = A\mathbf{x}^* - \mathbf{b}$.
+Then dual ascent method consists of iterating the updates
+\begin{align}
+    \mathbf{x}^{(k+1)} &= \arg\min_\mathbf{x}
+    L(\mathbf{x}, \mathbf{y}^{(k)}) \\
+    \mathbf{y}^{(k+1)} &= \mathbf{y}^{(k)} + 
+    \alpha_k (A\mathbf{x}^{(k+1)} - \mathbf{b})
+\end{align}
+where $\alpha_k$ is the step size in $k$th iteration.
+This algorithm can be used even in some cases when
+$g$ is not differentiable. In this case, 
+$A\mathbf{x}^{(k+1)} - \mathbf{b}$ is not the
+gradient of $g$, but the negative of a 
+\emph{subgradient} of $-g$.
+\par
+If $\alpha_k$ is chosen appropriately and several other
+assumptions hols,
+then the algorithm can converges to an optimal primal/dual
+pair. However, these asumptions do not hold in many
+applications. As an exmaple, if $f$ is a nonzero affine
+function of any component of $\mathbf{x}$, then the
+$\mathbf{x}$-update fails since $L$ is unbounded.
+
+\subsection{Dual Decomposition}
+A parallel version of Dual Ascent.
+
+\subsection{Argmented Lagrangians and the Method of Multipliers}
+The \emph{augmented Lagrangian} for (\ref{pro:dual-ascent}) is
+\begin{align}
+    L_\rho (\mathbf{x}, \mathbf{y}) = f(\mathbf{x}) + \mathbf{y}^T
+    (A\mathbf{x} - \mathbf{b}) + \frac{\rho}{2} \parallel
+    A\mathbf{x} - \mathbf{b} \parallel^2
+\end{align}
+The associated dual function 
+$g_\rho(\mathbf{y}) = \inf_{\mathbf{x}} L_\rho (\mathbf{x}, \mathbf{y})$.
+Sinilarily, we can derive the iterative update algorithm
+for this problem
+\begin{align}
+    \mathbf{x}^{(k+1)} &= \arg\min_\mathbf{x}
+    L_\rho(\mathbf{x}, \mathbf{y}^{(k)}) \\
+    \mathbf{y}^{(k+1)} &= \mathbf{y}^{(k)} + 
+    \rho (A\mathbf{x}^{(k+1)} - \mathbf{b})
+\end{align}
+
+The benefit of including the penalty term is that $\mathbf{x}^{(k)}$
+can be successfully updated in more cases, like when
+$f$ is an affine function as we mentioned above or not strictly convex.
+\par
+By using $\rho$ as the step size, the update is
+dual feasible. Recall that the optimal condition of
+(\ref{pro:dual-ascent}) is
+\begin{align}
+    A\mathbf{x}^* - \mathbf{b} &= 0 \\
+    \bigtriangledown_\mathbf{x} f(\mathbf{x}) + A^T \mathbf{y}^* &= 0
+\end{align}
+By definition,
+\begin{align}
+    \mathbf{x}^{(k+1)} &= \arg\min_\mathbf{x}
+    \label{equ:auglag-dual-feasible}
+    L_\rho(\mathbf{x}, \mathbf{y}^{(k)})
+\end{align}
+then, we have
+\begin{align}
+    \bigtriangledown_\mathbf{x} L_\rho (\mathbf{x}^{(k+1)}, \mathbf{y}^{(k)}) &= 0 \\
+    \bigtriangledown_\mathbf{x} f(\mathbf{x}^{(k+1)}) + 
+    A^T \mathbf{y}^{(k)} + \rho A^T (A\mathbf{x}^{(k+1)} - \mathbf{b}) &= 0 \\
+    \bigtriangledown_\mathbf{x} f(\mathbf{x}^{(k+1)}) + 
+    A^T (\mathbf{y}^{(k)} + \rho (A\mathbf{x}^{(k+1)} - \mathbf{b})) &= 0 \\
+    \bigtriangledown_\mathbf{x} f(\mathbf{x}^{(k+1)}) + 
+    A^T \mathbf{y}^{(k+1)} &= 0
+\end{align}
+which is (\ref{equ:auglag-dual-feasible}).
+
+
+
+
+\subsection{ADMM}
+ADMM is an algorithm that is intended to blend the
+decomposability of dual ascent with the superior
+convergence properties of the method of multipliers.
+The algorithm sloves problems in the form
+\begin{align}
+    \begin{array}{ll}
+        \min \ &f(\mathbf{x}) + g(\mathbf{z}) \\
+        s.t. \ &A\mathbf{x} + B\mathbf{z} = \mathbf{c}
+    \end{array}
+    \label{pro:admm}
+\end{align}
+the optimal value of the problem is denoted as $v^*$.
+As in the method of multipliers, we form the augmented
+Lagrangian
+\begin{align}
+    L_\rho (\mathbf{x}, \mathbf{z}, \mathbf{y}) = 
+    f(\mathbf{x}) + g(\mathbf{z}) + \mathbf{y}^T
+    (A\mathbf{x} + B\mathbf{z} - \mathbf{c}) +
+    \frac{\rho}{2} \parallel
+    A\mathbf{x} + B\mathbf{z} - \mathbf{c}
+    \parallel^2
+\end{align}
+
+ADMM consists of the iterations
+\begin{align}
+    \mathbf{x}^{(k+1)} &= \arg\min_\mathbf{x}
+    L_\rho(\mathbf{x}, \mathbf{z}^{(k)}, \mathbf{y}^{(k)}) \\
+    \mathbf{z}^{(k+1)} &= \arg\min_\mathbf{z}
+    L_\rho(\mathbf{x}^{(k+1)}, \mathbf{z}, \mathbf{y}^{(k)})\\
+    \mathbf{y}^{(k+1)} &= \mathbf{y}^{(k)} + 
+    \rho (A\mathbf{x}^{(k+1)} + B\mathbf{z}^{(k+1)} - \mathbf{c})
+\end{align}
+Notice that in the method of multipliers, the update has the form
+\begin{align}
+    (\mathbf{x}^{(k+1)}, \mathbf{z}^{(k+1)}) &= \arg\min_{\mathbf{x}, \mathbf{z}}
+    L_\rho(\mathbf{x}, \mathbf{z}, \mathbf{y}^{(k)})\\
+    \mathbf{y}^{(k+1)} &= \mathbf{y}^{(k)} + 
+    \rho (A\mathbf{x}^{(k+1)} + B\mathbf{z}^{(k+1)} - \mathbf{c})
+\end{align}
+
+which is, $\mathbf{x}$ and $\mathbf{z}$ are updated jointly.
+In ADMM, on the other hand, $\mathbf{x}$ and $\mathbf{z}$
+are updated in an alternating fashion, which accounts for the term
+\emph{alternating direction}.
+
+\subsubsection{Scaled Form}
+ADMM can be written in a more convenient form
+\begin{align}
+    \mathbf{x}^{(k+1)} &= \arg\min_\mathbf{x}
+    f(\mathbf{x}) + \frac{\rho}{2} \parallel
+    A\mathbf{x} + B\mathbf{z}^{(k)} - \mathbf{c} + \mathbf{u}^{(k)}
+    \parallel^2 \\
+    \mathbf{z}^{(k+1)} &= \arg\min_\mathbf{z}
+    g(\mathbf{z}) + \frac{\rho}{2} \parallel
+    A\mathbf{x}^{(k+1)} + B\mathbf{z} - \mathbf{c} + \mathbf{u}^{(k)}
+    \parallel^2 \\
+    \mathbf{u}^{(k+1)} &= \mathbf{u}^{(k)} + 
+    A\mathbf{x}^{(k+1)} + B\mathbf{z}^{(k+1)} - \mathbf{c}
+\end{align}
+where $\mathbf{u} = \frac{1}{\rho} \mathbf{y}$
+
+\subsubsection{Assumpions}
+\noindent\textbf{Assumption 1.}
+The functions $f$ and $g$ are closed, proper, and convex.
+\par
+\noindent\textbf{Assumption 2.}
+The unaugmented Lagrangian $L$ has s saddle point.
+
+
+
+\subsection{Proximal Method}
+
+Sttucture in $f$, $g$, $A$, and $B$ can often be exploited
+to carry out the $x$-update and $z$-update more efficiently.
+Denote $\mathbf{v} = -B\mathbf{z} + \mathbf{c} - \mathbf{u}$.
+Then the $x$-update is
+\begin{align}
+    \mathbf{x}^+ = \arg\min_\mathbf{x} f(\mathbf{x}) + \frac{\rho}{2}
+    \parallel \mathbf{x} - \mathbf{v} \parallel^2
+\end{align}
+As a function of $\mathbf{v}$, the RHS is denoted $\mathbf{prox}_{f, \rho}(\mathbf{v})$.
